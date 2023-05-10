@@ -7,7 +7,9 @@ import jwt from "jsonwebtoken";
 
 export const authRouter = new Router();
 
+
 authRouter.post('/register', registerValidation, async (req, res) => {
+    console.log(req.body);
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {

@@ -7,6 +7,22 @@ const app = express();
 app.use(express.json());
 app.use("/auth", authRouter);
 
+app.get('/time-management-app/public/main.html', (req,res) => {
+    res.sendFile("C:/Users/molou/WebstormProjects/time-management-app/public/main.html")
+});
+app.get('/time-management-app/public/register.html', (req,res) => {
+    res.sendFile("C:/Users/molou/WebstormProjects/time-management-app/public/register.html")
+});
+app.get('/time-management-app/public/login.html', (req,res) => {
+    res.sendFile("C:/Users/molou/WebstormProjects/time-management-app/public/login.html")
+});
+app.get('/time-management-app/public/dashboard.html', (req,res) => {
+    res.sendFile("C:/Users/molou/WebstormProjects/time-management-app/public/dashboard.html")
+});
+app.get('/time-management-app/style.css', (req,res) => {
+    res.sendFile("C:/Users/molou/WebstormProjects/time-management-app/style.css")
+});
+
 function startServer() {
     app.listen(3000, (error) => {
         if (error) {

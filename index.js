@@ -1,7 +1,11 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import {authRouter} from "./authentication/authRouter.js";
 
 const app = express();
+
+app.use(express.json());
+app.use("/auth", authRouter);
 
 function startServer() {
     app.listen(3000, (error) => {

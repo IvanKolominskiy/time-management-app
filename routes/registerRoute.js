@@ -1,15 +1,21 @@
-import {Router} from "express";
+import express, {Router} from "express";
 import {registerValidation} from "../validations/registerValidation.js";
 import {validationResult} from "express-validator";
 import UserModel from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import path from 'path';
 
-export const registerRoutes = new Router();
+export const registerRoute = new Router();
+const __dirname = path.resolve();
+const urlencodedParser = express.urlencoded({extended: false});
+
+registerRoute.get('/register', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'register.html'));
+})
 
 
-registerRoutes.post('/register', registerValidation, async (req, res) => {
-    console.log(req.body);
+registerRoute.post('/register', urlencodedParser, registerValidation, async (req, res) => {
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -44,7 +50,7 @@ registerRoutes.post('/register', registerValidation, async (req, res) => {
         });
     } catch (error) {
         console.log(error);
-        res.status(500).json( {
+        res.status(500).send( {
             massage: 'Не удалось зарегестрироваться'
         })
     }

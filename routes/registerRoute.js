@@ -12,7 +12,7 @@ const urlencodedParser = express.urlencoded({extended: false});
 
 registerRoute.get('/register', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'register.html'));
-})
+});
 
 
 registerRoute.post('/register', urlencodedParser, registerValidation, async (req, res) => {

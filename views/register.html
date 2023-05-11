@@ -14,7 +14,8 @@
 </header>
 <main>
     <h2>Регистрация</h2>
-    <form action="/register" method="post">
+    <iframe name="votar" style="display: none"></iframe>
+    <form action="/register" method="post" target="votar">
         <label for="username">Имя пользователя</label>
         <input type="text" name="login" id="username" required>
         <label for="password">Пароль</label>

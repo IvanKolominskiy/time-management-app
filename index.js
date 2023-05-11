@@ -1,11 +1,15 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import {authRouter} from "./authentication/authRouter.js";
+import path from 'path';
 
 const app = express();
 
 app.use(express.json());
 app.use("/auth", authRouter);
+
+const __dirname = path.dirname(require.main.filename);
+app.use(express.static(path.join(__dirname,'public')));
 
 app.get('/time-management-app/public/main.html', (req,res) => {
     res.sendFile("C:/Users/molou/WebstormProjects/time-management-app/public/main.html")

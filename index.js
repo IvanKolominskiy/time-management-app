@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 app.use("/auth", authRouter);
 
-const __dirname = path.dirname(require.main.filename);
+const __dirname = path.resolve();
 app.use(express.static(path.join(__dirname,'public')));
 
 app.get('/time-management-app/public/main.html', (req,res) => {

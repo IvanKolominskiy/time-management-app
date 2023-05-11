@@ -5,10 +5,10 @@ import UserModel from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-export const authRouter = new Router();
+export const registerRoutes = new Router();
 
 
-authRouter.post('/register', registerValidation, async (req, res) => {
+registerRoutes.post('/register', registerValidation, async (req, res) => {
     console.log(req.body);
     try {
         const errors = validationResult(req);

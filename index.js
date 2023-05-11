@@ -1,19 +1,19 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import {authRouter} from "./authentication/authRouter.js";
+import {registerRoutes} from "./routes/registerRoutes.js";
+import {homeRoute} from "./routes/homeRoute.js";
 import path from 'path';
 
 const app = express();
 
 app.use(express.json());
-app.use("/auth", authRouter);
+
+app.use("/auth", registerRoutes);
+app.use(homeRoute);
 
 const __dirname = path.resolve();
 app.use(express.static(path.join(__dirname,'public')));
 
-app.get('/time-management-app/public/main.html', (req,res) => {
-    res.sendFile("C:/Users/molou/WebstormProjects/time-management-app/public/main.html")
-});
 app.get('/time-management-app/public/register.html', (req,res) => {
     res.sendFile("C:/Users/molou/WebstormProjects/time-management-app/public/register.html")
 });

@@ -50,7 +50,7 @@ registerRoute.post('/register', urlencodedParser, registerValidation, async (req
         });
     } catch (error) {
         console.log(error);
-        res.status(500).send( {
+        res.status(500).json( {
             massage: 'Не удалось зарегестрироваться'
         })
     }

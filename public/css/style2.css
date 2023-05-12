@@ -12,7 +12,7 @@ body{
 
 }
 .background{
-    background: url(les.jpg) no-repeat;
+    background: url(../jpg/les.jpg) no-repeat;
     background-position: center;
     background-size:cover ;
     height: 100vh;
@@ -98,7 +98,7 @@ body{
     width: 75%;
     height: 550px;
     margin-top: 20px;
-    background: url(les.jpg) no-repeat;
+    background: url(../jpg/les.jpg) no-repeat;
     background-position: center;
     background-size:cover ;
     border-radius: 20px;
@@ -215,7 +215,7 @@ body{
     left: 0;
     transform: translateY(-50%);
     font-size: 16px;
-    font-weight: 600px;
+    font-weight: 600;
     pointer-events: none;
     transition: .5s ease;
 

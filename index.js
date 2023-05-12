@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import {registerRoute} from "./routes/registerRoute.js";
 import {homeRoute} from "./routes/homeRoute.js";
 import {loginRoute} from "./routes/loginRoute.js";
+import {dashboardRoute} from "./routes/dashboardRoute.js";
 import path from 'path';
 
 const app = express();
@@ -12,6 +13,7 @@ app.use(express.json());
 app.use(registerRoute);
 app.use(homeRoute);
 app.use(loginRoute);
+app.use(dashboardRoute);
 
 const __dirname = path.resolve();
 app.use(express.static(path.join(__dirname,'public')));

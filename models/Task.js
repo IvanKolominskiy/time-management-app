@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
-const TaskBasketSchema = new mongoose.Schema({
-    task: {
+const TaskSchema = new mongoose.Schema({
+    text: {
         type: String,
         required: true,
     },
@@ -14,4 +14,4 @@ const TaskBasketSchema = new mongoose.Schema({
     timestamps: true
 });
 
-export default mongoose.model('TaskBasket', TaskBasketSchema);
+export default mongoose.model('Task', TaskSchema);

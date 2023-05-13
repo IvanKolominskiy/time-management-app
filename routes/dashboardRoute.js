@@ -13,8 +13,6 @@ dashboardRoute.get('/dashboard', (req, res) => {
 });
 
 dashboardRoute.post('/dashboard', urlencodedParser, taskValidation, async (req, res) => {
-    console.log(req.userId);
-
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -34,4 +32,16 @@ dashboardRoute.post('/dashboard', urlencodedParser, taskValidation, async (req, 
             message: 'Не удалось создать задачу',
         });
     }
-})
+});
+
+dashboardRoute.get('/dashboard/:user', async (req, res) => {
+    try {
+        const tasks = await TaskModel.find( {user: req.params.user} );
+        res.json(tasks);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            message: 'Не удалось получить задачи',
+        });
+    }
+});

@@ -27,8 +27,8 @@ function startServer() {
         console.log("Server is running");
     })
 
-    mongoose.connect('mongodb+srv://admin:F5jkkbaHvORSjvhF@cluster0.7pfnlup.mongodb.net/blog?retryWrites=true&w=majority')
-        .then(() => console.log("Data base is connected"))
+    mongoose.connect('mongodb+srv://admin:F5jkkbaHvORSjvhF@cluster0.7pfnlup.mongodb.net/usersData?retryWrites=true&w=majority')
+        .then(() => console.log("Database is connected"))
         .catch((error) => console.log(error));
 }
 

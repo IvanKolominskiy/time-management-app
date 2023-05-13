@@ -46,3 +46,33 @@ dashboardRoute.get('/dashboard/:user', async (req, res) => {
         });
     }
 });
+
+dashboardRoute.delete('/dashboard/:id', async (req, res) => {
+    try {
+        const taskId = req.params.id;
+
+        TaskModel.findOneAndDelete({_id: taskId})
+            .then((doc) => {
+                if (!doc) {
+                    return res.status(404).json({
+                        message: 'Задача не найдена'
+                    });
+                }
+
+                res.json({
+                    success: true,
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+                return res.status(500).json({
+                    message: 'Не удалось удалить задачу',
+                });
+            });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            message: 'Не удалось удалить задачу',
+        });
+    }
+});

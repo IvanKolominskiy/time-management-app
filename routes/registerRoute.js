@@ -17,6 +17,7 @@ registerRoute.get('/register', (req, res) => {
 
 registerRoute.post('/register', urlencodedParser, registerValidation, async (req, res) => {
     console.log(req.body);
+
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {

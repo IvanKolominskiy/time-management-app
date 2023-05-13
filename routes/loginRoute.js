@@ -12,8 +12,9 @@ loginRoute.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'login.html'));
 });
 
-loginRoute.post('/login', urlencodedParser,async (req, res) => {
+loginRoute.post('/login', urlencodedParser, async (req, res) => {
     console.log(req.body);
+
     try {
         const user = await UserModel.findOne({ login: req.body.login });
         if (!user) {

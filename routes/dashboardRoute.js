@@ -35,7 +35,7 @@ dashboardRoute.post('/dashboard', checkAuth, urlencodedParser, taskValidation, a
     }
 });
 
-dashboardRoute.get('/dashboard/:user', async (req, res) => {
+dashboardRoute.get('/dashboard/:user', checkAuth, async (req, res) => {
     try {
         const tasks = await TaskModel.find( {user: req.params.user} );
         res.json(tasks);

@@ -16,4 +16,5 @@ async function sendRegisterRequest() {
     });
 
     const { token } = await response.json();
+    document.cookie = "token=" + token;
 }

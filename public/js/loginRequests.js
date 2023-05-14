@@ -15,4 +15,5 @@ async function sendLoginRequest() {
     });
 
     const { token } = await response.json();
+    document.cookie = "token=" + token;
 }

@@ -1,4 +1,4 @@
-import express, {Router} from "express";
+import {Router} from "express";
 import path from 'path';
 import UserModel from "../models/User.js";
 import bcrypt from "bcrypt";
@@ -6,13 +6,12 @@ import jwt from "jsonwebtoken";
 
 export const loginRoute = new Router();
 const __dirname = path.resolve();
-const urlencodedParser = express.urlencoded({extended: false});
 
 loginRoute.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'login.html'));
 });
 
-loginRoute.post('/login', urlencodedParser, async (req, res) => {
+loginRoute.post('/login', async (req, res) => {
     console.log(req.body);
 
     try {

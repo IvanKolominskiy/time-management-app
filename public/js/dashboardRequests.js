@@ -16,3 +16,13 @@ async function sendAddTaskRequest() {
         headers: headers
     });
 }
+
+async function exit() {
+    const results = document.cookie.match(/token=(.+?)(;|$)/);
+    if (results) {
+        const token = results[1];
+        document.cookie = "token=" + token + "; max-age=0";
+    }
+
+    window.location.replace('/');
+}

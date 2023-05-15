@@ -13,7 +13,9 @@ dashboardRoute.get('/dashboard', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'dashboard.html'));
 });
 
-dashboardRoute.post('/dashboard', checkAuth, urlencodedParser, taskValidation, async (req, res) => {
+dashboardRoute.post('/dashboard', checkAuth, taskValidation, async (req, res) => {
+    console.log(req.body);
+
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -21,7 +23,11 @@ dashboardRoute.post('/dashboard', checkAuth, urlencodedParser, taskValidation, a
         }
 
         const doc = new TaskModel({
-            text: req.body.text,
+            name: req.body.name,
+            description: req.body.description,
+            deadlineDay: req.body.deadlineDay,
+            deadlineMonth: req.body.deadlineMonth,
+            deadlineYear: req.body.deadlineYear,
             user: req.userId
         });
 

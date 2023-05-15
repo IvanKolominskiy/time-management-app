@@ -21,7 +21,8 @@
             class="left-column flex flex-column height-full justify-center items-center"
     >
         <h1 class="welcoming-title">Добро пожаловать</h1>
-        <form class="form" autocomplete="off">
+        <iframe name="votar" style="display: none"></iframe>
+        <form class="form" autocomplete="off" target="votar">
             <label for="email" class="label">Email</label>
             <input type="email" name="email" id="email" class="input" required />
             <label for="login" class="label">Логин</label>
@@ -31,6 +32,7 @@
             <button
                     type="submit"
                     class="button regular-button pink-background cta-btn"
+                    onclick="sendRegisterRequest()"
             >
                 Зарегистрироваться
             </button>

@@ -21,7 +21,8 @@
           class="left-column flex flex-column height-full justify-center items-center"
   >
     <h1 class="welcoming-title">С возвращением</h1>
-    <form class="form" autocomplete="off">
+    <iframe name="votar" style="display: none"></iframe>
+    <form class="form" autocomplete="off" target="votar">
       <label for="login" class="label">Логин</label>
       <input type="text" name="login" id="login" class="input" required />
 
@@ -37,6 +38,7 @@
       <button
               type="submit"
               class="button regular-button pink-background cta-btn"
+              onclick="sendLoginRequest()"
       >
         Войти
       </button>

@@ -1,7 +1,7 @@
 async function sendRegisterRequest() {
-    let login = document.querySelector('#username');
+    let login = document.querySelector('#login');
     let password = document.querySelector('#password');
-    let email = document.querySelector('#useremail');
+    let email = document.querySelector('#email');
 
     let body = { login: login.value, password: password.value, email: email.value };
 
@@ -15,6 +15,15 @@ async function sendRegisterRequest() {
         headers: headers
     });
 
+    if (response.status === 400) {
+        window.location.replace('/register');
+    }
+
+    if (response.status > 200) {
+        window.location.replace('/register');
+    }
+
     const { token } = await response.json();
     document.cookie = "token=" + token;
+    window.location.replace('/dashboard');
 }

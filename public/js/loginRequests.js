@@ -1,5 +1,5 @@
 async function sendLoginRequest() {
-    let login = document.querySelector('#username');
+    let login = document.querySelector('#login');
     let password = document.querySelector('#password');
 
     let body = { login: login.value, password: password.value };
@@ -14,6 +14,11 @@ async function sendLoginRequest() {
         headers: headers
     });
 
+    if (response.status > 200) {
+        window.location.replace('/login');
+    }
+
     const { token } = await response.json();
     document.cookie = "token=" + token;
+    window.location.replace('/dashboard');
 }

@@ -4,6 +4,7 @@ import {registerRoute} from "./routes/registerRoute.js";
 import {homeRoute} from "./routes/homeRoute.js";
 import {loginRoute} from "./routes/loginRoute.js";
 import {dashboardRoute} from "./routes/dashboardRoute.js";
+import {DB_LOGIN, DB_PASSWORD} from "./secrets.js";
 import path from 'path';
 
 const app = express();
@@ -27,7 +28,7 @@ function startServer() {
         console.log("Server is running");
     })
 
-    mongoose.connect('mongodb+srv://admin:F5jkkbaHvORSjvhF@cluster0.7pfnlup.mongodb.net/usersData?retryWrites=true&w=majority')
+    mongoose.connect(`mongodb+srv://${DB_LOGIN}:${DB_PASSWORD}@cluster0.7pfnlup.mongodb.net/usersData?retryWrites=true&w=majority`)
         .then(() => console.log("Database is connected"))
         .catch((error) => console.log(error));
 }

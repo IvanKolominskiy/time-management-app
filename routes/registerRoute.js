@@ -5,6 +5,7 @@ import UserModel from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import path from 'path';
+import {PRIVATE_KEY} from "../secrets.js";
 
 export const registerRoute = new Router();
 const __dirname = path.resolve();
@@ -38,7 +39,7 @@ registerRoute.post('/register', registerValidation, async (req, res) => {
         const token = jwt.sign({
             _id: user._id,
         },
-        'secretKey123',
+        PRIVATE_KEY,
         {
             expiresIn: '30d'
         });

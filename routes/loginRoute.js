@@ -3,6 +3,7 @@ import path from 'path';
 import UserModel from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import {PRIVATE_KEY} from "../secrets.js";
 
 export const loginRoute = new Router();
 const __dirname = path.resolve();
@@ -32,7 +33,7 @@ loginRoute.post('/login', async (req, res) => {
         const token = jwt.sign({
                 _id: user._id,
             },
-            'secretKey123',
+            PRIVATE_KEY,
             {
                 expiresIn: '30d'
             });

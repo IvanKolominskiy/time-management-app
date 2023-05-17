@@ -20,7 +20,7 @@ registerRoute.post('/register', registerValidation, async (req, res) => {
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json(errors.array());
+            return res.status(400).json({errors: errors.array()});
         }
 
         const password = req.body.password;
@@ -52,7 +52,7 @@ registerRoute.post('/register', registerValidation, async (req, res) => {
     } catch (error) {
         console.log(error);
         res.status(500).json( {
-            massage: 'Не удалось зарегестрироваться'
+            message: 'Не удалось зарегестрироваться'
         })
     }
 });

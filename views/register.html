@@ -13,7 +13,7 @@
     />
     <link rel="stylesheet" href="/css/main.css" />
     <link rel="stylesheet" href="/css/entry-page.css" />
-    <script src="/js/registerRequests.js"></script>
+<!--    <script src="/js/registerScript.js"></script>-->
 </head>
 <body>
 <div class="row height-full">
@@ -30,9 +30,9 @@
             <label for="password" class="label">Пароль</label>
             <input type="password" name="password" id="password" class="input" required/>
             <button
+                    id="register"
                     type="submit"
                     class="button regular-button pink-background cta-btn"
-                    onclick="sendRegisterRequest()"
             >
                 Зарегистрироваться
             </button>
@@ -44,5 +44,6 @@
     </div>
     <div class="right-column"></div>
 </div>
+<script src="/js/registerScript.js"></script>
 </body>
 </html>

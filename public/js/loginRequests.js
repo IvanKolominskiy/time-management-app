@@ -15,7 +15,11 @@ async function sendLoginRequest() {
     });
 
     if (response.status > 200) {
-        window.location.replace('/login');
+        response.json()
+            .then(json => {
+                alert(json.message);
+                window.location.replace('/login');
+            });
     }
 
     const { token } = await response.json();

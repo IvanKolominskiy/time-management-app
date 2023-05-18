@@ -4,6 +4,8 @@ import {taskValidation} from "../validations/taskValidation.js";
 import TaskModel from "../models/Task.js";
 import path from 'path';
 import checkAuth from "../utils/checkAuth.js";
+import jwt from "jsonwebtoken";
+import {PRIVATE_KEY} from "../secrets.js";
 
 export const dashboardRoute = new Router();
 const __dirname = path.resolve();
@@ -41,10 +43,13 @@ dashboardRoute.post('/dashboard', checkAuth, taskValidation, async (req, res) =>
     }
 });
 
-dashboardRoute.get('/dashboard/:user', checkAuth, async (req, res) => {
+dashboardRoute.get('/dashboard/getNotes', async (req, res) => {
+    const token = (req.headers.authorization || '').replace(/Bearer\s?/, '');
+    const decoded = jwt.verify(token, PRIVATE_KEY);
+
     try {
-        const tasks = await TaskModel.find( {user: req.params.user} );
-        res.json(tasks);
+        const tasks = await TaskModel.find( {user: decoded._id} );
+        res.json({tasks: tasks});
     } catch (err) {
         console.log(err);
         res.status(500).json({

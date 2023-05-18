@@ -13,7 +13,6 @@
   />
   <link rel="stylesheet" href="/css/main.css" />
   <link rel="stylesheet" href="/css/syle_for_dasboard.css" />
-  <script src="/js/dashboardScript.js"></script>
 </head>
 <body>
 <div class="content-container">
@@ -88,47 +87,7 @@
               <span class="circle pink-background"></span
               ><span class="text">Начать</span>
         </h2>
-        <ul class="tasks-list">
-          <li class="task-item">
-            <button class="task-button">
-              <p class="task-name">Design UI</p>
-              <p class="task-due-date">Сделать до 7 ноября, 2023</p>
-              <iconify-icon
-                      icon="material-symbols:arrow-back-ios-rounded"
-                      style="color: black"
-                      width="18"
-                      height="18"
-                      class="arrow-icon"
-              ></iconify-icon>
-            </button>
-          </li>
-          <li class="task-item">
-            <button class="task-button">
-              <p class="task-name">Design UI</p>
-              <p class="task-due-date">Сделать до 7 ноября, 2023</p>
-              <iconify-icon
-                      icon="material-symbols:arrow-back-ios-rounded"
-                      style="color: black"
-                      width="18"
-                      height="18"
-                      class="arrow-icon"
-              ></iconify-icon>
-            </button>
-          </li>
-          <li class="task-item">
-            <button class="task-button">
-              <p class="task-name">Design UI</p>
-              <p class="task-due-date">Сделать до 7 ноября, 2023</p>
-              <iconify-icon
-                      icon="material-symbols:arrow-back-ios-rounded"
-                      style="color: black"
-                      width="18"
-                      height="18"
-                      class="arrow-icon"
-              ></iconify-icon>
-            </button>
-          </li>
-        </ul>
+          <ul class="tasks-list"></ul>
       </div>
       <div class="list-container blue">
         <h2 class="list-header">
@@ -416,7 +375,8 @@
       ></iconify-icon>
     </button>
     <h1 class="header">Добавить задачу</h1>
-    <form class="form" autocomplete="off">
+    <iframe name="votar" style="display: none"></iframe>
+    <form class="form" autocomplete="off" target="votar">
       <label for="name" class="label">Имя</label>
       <input
               type="text"
@@ -587,75 +547,6 @@
   </div>
 </div>
 <script src="https://code.iconify.design/iconify-icon/1.0.5/iconify-icon.min.js"></script>
-<script>
-  const radioViewOptions = document.querySelectorAll("input[name='view-option']");
-  const listView = document.getElementById("list-view");
-  const boardView = document.getElementById("board-view");
-  const addTaskCTA = document.getElementById("add-task-cta");
-  const setTaskOverlay = document.getElementById("set-task-overlay");
-  const closeButtons = document.querySelectorAll(".close-button");
-  const statusSelect = document.getElementById("status-select");
-  const statusDropdown = document.getElementById("status-dropdown");
-  const taskItems = document.querySelectorAll(".task-item");
-  const viewTaskOverlay = document.getElementById("view-task-overlay");
-  const deleteTaskCTA = document.getElementById("delete-task-cta");
-  const notification = document.getElementById("notification");
-  let activeOverlay = null;
-
-
-  radioViewOptions.forEach((radioButton) => {
-    radioButton.addEventListener("change", (event) => {
-      const eventTarget = event.target;
-      const viewOption = eventTarget.value;
-
-      switch (viewOption) {
-        case "list":
-          boardView.classList.add("hide");
-          listView.classList.remove("hide");
-          break;
-        case "board":
-          listView.classList.add("hide");
-          boardView.classList.remove("hide");
-          break;
-      }
-    });
-  });
-
-  addTaskCTA.addEventListener("click", () => {
-    setTaskOverlay.classList.remove("hide");
-    activeOverlay = setTaskOverlay;
-    document.body.classList.add("overflow-hidden");
-  });
-
-  closeButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      activeOverlay.classList.add("hide");
-      activeOverlay = null;
-      document.body.classList.remove("overflow-hidden");
-    });
-  });
-
-  statusSelect.addEventListener("click", () => {
-    statusDropdown.classList.toggle("hide");
-  });
-
-  taskItems.forEach((task) => {
-    task.addEventListener("click", () => {
-      viewTaskOverlay.classList.remove("hide");
-      activeOverlay = viewTaskOverlay;
-      document.body.classList.add("overflow-hidden");
-    });
-  });
-
-  deleteTaskCTA.addEventListener("click", () => {
-    activeOverlay.classList.add("hide");
-    activeOverlay = null;
-    document.body.classList.remove("overflow-hidden");
-    notification.classList.add("show");
-    setTimeout(() => {
-      notification.classList.remove("show");
-    }, 3000);
-  });
-</script>
+<script src ="/js/dashboardScript.js"></script>
 </body>
 </html>

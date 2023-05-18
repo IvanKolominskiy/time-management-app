@@ -47,6 +47,17 @@ async function sendGetNotesRequest() {
     return data;
 }
 
+async function checkAuth() {
+    const results = document.cookie.match(/token=(.+?)(;|$)/);
+
+    if (!results) {
+        alert('Please login or register first');
+        window.location.replace('/register');
+    }
+}
+
+checkAuth();
+
 const notes = sendGetNotesRequest();
 notes.then(data => {
     data.tasks.forEach(el => {
@@ -70,7 +81,7 @@ notes.then(data => {
         noteContainer.innerHTML += note;
     })
 
-    let taskItems = document.querySelectorAll(`.task-item`);
+    const taskItems = document.querySelectorAll(`.task-item`);
     taskItems.forEach((task) => {
         task.addEventListener("click", () => {
             viewTaskOverlay.classList.remove("hide");

@@ -15,11 +15,15 @@ async function sendAddTaskRequest() {
         'Authorization': token
     }
 
-    const res = await fetch('/dashboard', {
+    const response = await fetch('/dashboard', {
         method: 'POST',
         body: JSON.stringify(body),
         headers: headers
     });
+
+    const data = await response.json();
+
+    return { status: response.status, data: data };
 }
 
 async function exit() {
@@ -79,7 +83,7 @@ notes.then(data => {
 
         let noteContainer = document.querySelector(".tasks-list");
         noteContainer.innerHTML += note;
-    })
+    });
 
     const taskItems = document.querySelectorAll(`.task-item`);
     taskItems.forEach((task) => {
@@ -104,6 +108,7 @@ const deleteTaskCTA = document.getElementById("delete-task-cta");
 const notification = document.getElementById("notification");
 let activeOverlay = null;
 
+const addTaskButton = document.getElementById("add-task-button");
 
 radioViewOptions.forEach((radioButton) => {
     radioButton.addEventListener("change", (event) => {
@@ -149,4 +154,52 @@ deleteTaskCTA.addEventListener("click", () => {
     setTimeout(() => {
         notification.classList.remove("show");
     }, 3000);
+});
+
+addTaskButton.addEventListener("click", async () => {
+    const res = await sendAddTaskRequest();
+
+    if (res.status === 400) {
+        let errors = '';
+        res.data.errors.forEach((el) => errors = errors + el.msg + '\n');
+        alert(errors);
+    }
+
+    if (res.status === 500) {
+        alert(res.data.message);
+    }
+
+    if (res.status === 200) {
+        const note = `
+        <li class="task-item">
+            <button class="task-button">
+              <p class="task-name">${res.data.task.name}</p>
+              <p class="task-due-date">${res.data.task.description}</p>
+              <iconify-icon
+                      icon="material-symbols:arrow-back-ios-rounded"
+                      style="color: black"
+                      width="18"
+                      height="18"
+                      class="arrow-icon"
+              ></iconify-icon>
+            </button>
+        </li>`;
+
+        let noteContainer = document.querySelector(".tasks-list");
+        noteContainer.innerHTML += note;
+
+        const taskItems = document.querySelectorAll(`.task-item`);
+        const currentTask = taskItems[taskItems.length - 1];
+        currentTask.addEventListener("click", () => {
+            viewTaskOverlay.classList.remove("hide");
+            activeOverlay = viewTaskOverlay;
+            document.body.classList.add("overflow-hidden");
+        });
+    }
+
+    document.querySelector('#name').value = '';
+    document.querySelector('#description').value = '';
+    document.querySelector('#due-date-day').value = '';
+    document.querySelector('#due-date-month').value = '';
+    document.querySelector('#due-date-year').value = '';
 });

@@ -16,10 +16,13 @@ dashboardRoute.get('/dashboard', (req, res) => {
 dashboardRoute.post('/dashboard', taskValidation, async (req, res) => {
     console.log(req.body);
 
+    const token = (req.headers.authorization || '').replace(/Bearer\s?/, '');
+    const decoded = jwt.verify(token, PRIVATE_KEY);
+
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json(errors.array());
+            return res.status(400).json({errors: errors.array()});
         }
 
         const doc = new TaskModel({
@@ -28,11 +31,11 @@ dashboardRoute.post('/dashboard', taskValidation, async (req, res) => {
             deadlineDay: req.body.deadlineDay,
             deadlineMonth: req.body.deadlineMonth,
             deadlineYear: req.body.deadlineYear,
-            user: req.userId
+            user: decoded._id
         });
 
         const task = await doc.save();
-        res.json(task);
+        res.json({task: task});
     } catch (err) {
         console.log(err);
         res.status(500).json({

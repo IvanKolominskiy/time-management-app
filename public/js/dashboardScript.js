@@ -26,7 +26,7 @@ async function sendAddTaskRequest() {
     return { status: response.status, data: data };
 }
 
-async function exit() {
+function exit() {
     const results = document.cookie.match(/token=(.+?)(;|$)/);
     if (results) {
         const token = results[1];
@@ -51,11 +51,7 @@ async function sendGetNotesRequest() {
     return data;
 }
 
-async function updateData() {
-    window.location.replace('/dashboard');
-}
-
-async function checkAuth() {
+function checkAuth() {
     const results = document.cookie.match(/token=(.+?)(;|$)/);
 
     if (!results) {
@@ -64,29 +60,33 @@ async function checkAuth() {
     }
 }
 
-checkAuth();
+async function showInfo(id){
+    const currentInfo = tasksInfo[id];
 
-const notes = sendGetNotesRequest();
-notes.then(data => {
-    data.tasks.forEach(el => {
-        const note = `
-        <li class="task-item">
-            <button class="task-button">
-              <p class="task-name">${el.name}</p>
-              <p class="task-due-date">${el.description}</p>
-              <iconify-icon
-                      icon="material-symbols:arrow-back-ios-rounded"
-                      style="color: black"
-                      width="18"
-                      height="18"
-                      class="arrow-icon"
-              ></iconify-icon>
-            </button>
-        </li>`;
+    const notesInfoContainer = document.querySelector('.task-info');
+    notesInfoContainer.innerHTML = currentInfo;
+}
 
+async function deleteNote(index) {
+    await fetch('/dashboard/deleteNote', {
+        method: 'DELETE',
+        body: JSON.stringify({id: tasks[index]._id}),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
 
+    tasks.splice(index, 1);
+    tasksInfo.splice(index, 1);
+    tasksViews.splice(index, 1);
+
+    showNotes(false);
+}
+
+function showNotes(mainPageFlag) {
+    tasksViews.reverse().forEach((el) => {
         let noteContainer = document.querySelector(".tasks-list");
-        noteContainer.innerHTML += note;
+        noteContainer.innerHTML += el;
     });
 
     const taskItems = document.querySelectorAll(`.task-item`);
@@ -97,8 +97,84 @@ notes.then(data => {
             document.body.classList.add("overflow-hidden");
         });
     });
-});
 
+    if (!mainPageFlag) {
+        window.location.replace('/dashboard');
+    }
+}
+
+checkAuth();
+
+let tasksInfo = [];
+let tasks = []
+let tasksViews = []
+
+const res = sendGetNotesRequest();
+res.then(data => {
+    data.tasks.forEach((el, index) => {
+        const note = `
+        <li class="task-item">
+            <button class="task-button" onclick="showInfo(${index})">
+              <p class="task-name">${el.name}</p>
+              <p class="task-due-date">Сделать до ${el.deadlineDay}.${el.deadlineMonth}.${el.deadlineYear}</p>
+              <iconify-icon
+                      icon="material-symbols:arrow-back-ios-rounded"
+                      style="color: black"
+                      width="18"
+                      height="18"
+                      class="arrow-icon"
+              ></iconify-icon>
+            </button>
+        </li>`;
+
+        const noteInfo = `
+            <h1 class="header no-margin">Имя</h1>
+            <p class="value">${el.name}</p>
+            <h1 class="header">Описание</h1>
+            <p class="value">
+              ${el.description}
+            </p>
+            <div class="flex items-center">
+              <h1 class="header min-width">Дата завершения</h1>
+              <p class="value">Сделать до ${el.deadlineDay}.${el.deadlineMonth}.${el.deadlineYear}</p>
+            </div>
+            <div class="flex items-center">
+              <h1 class="header min-width">Статус</h1>
+              <p class="value status-value">
+                <span class="circle blue-background"></span><span>В процессе</span>
+              </p>
+            </div>
+            <div class="control-buttons-container">
+              <button
+                      class="button circle-button pink-background flex justify-center items-center"
+              >
+                <iconify-icon
+                        icon="material-symbols:edit-rounded"
+                        style="color: black"
+                        width="24"
+                        height="24"
+                ></iconify-icon>
+              </button>
+              <button
+                      id="delete-task-cta"
+                      class="button circle-button pink-background flex justify-center items-center"
+                      onclick="deleteNote(${index})"
+              >
+                <iconify-icon
+                        icon="ic:round-delete"
+                        style="color: black"
+                        width="24"
+                        height="24"
+                ></iconify-icon>
+              </button>
+            </div>`
+
+        tasksViews.push(note);
+        tasksInfo.push(noteInfo);
+        tasks.push(el);
+    });
+    showNotes(true);
+});
 const radioViewOptions = document.querySelectorAll("input[name='view-option']");
 const listView = document.getElementById("list-view");
 const boardView = document.getElementById("board-view");
@@ -108,12 +184,9 @@ const closeButtons = document.querySelectorAll(".close-button");
 const statusSelect = document.getElementById("status-select");
 const statusDropdown = document.getElementById("status-dropdown");
 const viewTaskOverlay = document.getElementById("view-task-overlay");
-const deleteTaskCTA = document.getElementById("delete-task-cta");
-const notification = document.getElementById("notification");
 let activeOverlay = null;
 
 const addTaskButton = document.getElementById("add-task-button");
-const exitButton = document.getElementById("exit-button");
 
 radioViewOptions.forEach((radioButton) => {
     radioButton.addEventListener("change", (event) => {
@@ -151,16 +224,6 @@ statusSelect.addEventListener("click", () => {
     statusDropdown.classList.toggle("hide");
 });
 
-deleteTaskCTA.addEventListener("click", () => {
-    activeOverlay.classList.add("hide");
-    activeOverlay = null;
-    document.body.classList.remove("overflow-hidden");
-    notification.classList.add("show");
-    setTimeout(() => {
-        notification.classList.remove("show");
-    }, 3000);
-});
-
 addTaskButton.addEventListener("click", async () => {
     const res = await sendAddTaskRequest();
 
@@ -175,6 +238,8 @@ addTaskButton.addEventListener("click", async () => {
     }
 
     if (res.status === 200) {
+        alert('The task was successfully created');
+
         const note = `
         <li class="task-item">
             <button class="task-button">
@@ -190,16 +255,51 @@ addTaskButton.addEventListener("click", async () => {
             </button>
         </li>`;
 
-        let noteContainer = document.querySelector(".tasks-list");
-        noteContainer.innerHTML += note;
+        const noteInfo = `
+            <h1 class="header no-margin">Имя</h1>
+            <p class="value">${res.data.task.name}</p>
+            <h1 class="header">Описание</h1>
+            <p class="value">
+              ${res.data.task.description}
+            </p>
+            <div class="flex items-center">
+              <h1 class="header min-width">Дата завершения</h1>
+              <p class="value">Сделать до ${res.data.task.deadlineDay}.${res.data.task.deadlineMonth}.${res.data.task.deadlineYear}</p>
+            </div>
+            <div class="flex items-center">
+              <h1 class="header min-width">Статус</h1>
+              <p class="value status-value">
+                <span class="circle blue-background"></span><span>В процессе</span>
+              </p>
+            </div>
+            <div class="control-buttons-container">
+              <button
+                      class="button circle-button pink-background flex justify-center items-center"
+              >
+                <iconify-icon
+                        icon="material-symbols:edit-rounded"
+                        style="color: black"
+                        width="24"
+                        height="24"
+                ></iconify-icon>
+              </button>
+              <button
+                      id="delete-task-cta"
+                      class="button circle-button pink-background flex justify-center items-center"
+                      onclick="deleteNote(${tasks.length - 1})"
+              >
+                <iconify-icon
+                        icon="ic:round-delete"
+                        style="color: black"
+                        width="24"
+                        height="24"
+                ></iconify-icon>
+              </button>
+            </div>`
 
-        const taskItems = document.querySelectorAll(`.task-item`);
-        const currentTask = taskItems[taskItems.length - 1];
-        currentTask.addEventListener("click", () => {
-            viewTaskOverlay.classList.remove("hide");
-            activeOverlay = viewTaskOverlay;
-            document.body.classList.add("overflow-hidden");
-        });
+        tasksViews.push(note);
+        tasksInfo.push(noteInfo);
+        tasks.push(res.data.task);
     }
 
     document.querySelector('#name').value = '';

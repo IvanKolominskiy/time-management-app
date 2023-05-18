@@ -59,9 +59,11 @@ dashboardRoute.get('/dashboard/getNotes', async (req, res) => {
     }
 });
 
-dashboardRoute.delete('/dashboard/:id', async (req, res) => {
+dashboardRoute.delete('/dashboard/deleteNote', async (req, res) => {
+    console.log(req.body);
+
     try {
-        const taskId = req.params.id;
+        const taskId = req.body.id;
 
         TaskModel.findOneAndDelete({_id: taskId})
             .then((doc) => {

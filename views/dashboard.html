@@ -16,15 +16,6 @@
 </head>
 <body>
 <div class="content-container">
-  <div id="notification" class="notification green-background">
-    <iconify-icon
-            icon="mdi:check-circle-outline"
-            style="color: black"
-            width="24"
-            height="24"
-    ></iconify-icon>
-    <p>Задача удалена</p>
-  </div>
   <div class="max-width-container">
     <div class="header flex items-center justify-between">
       <h1 class="title">Мои задачи</h1>
@@ -366,7 +357,7 @@
   <div class="overlay-content pink-background">
     <button
             class="button circle-button blue-background flex justify-center items-center close-button"
-            onclick="updateData()"
+            onclick="showNotes(false)"
     >
       <iconify-icon
               icon="material-symbols:close-rounded"
@@ -506,45 +497,7 @@
               height="26"
       ></iconify-icon>
     </button>
-    <h1 class="header no-margin">Имя</h1>
-    <p class="value">Слишком длинное имя задачи</p>
-    <h1 class="header">Описание</h1>
-    <p class="value">
-      some long task namesome long task namesome long task name
-    </p>
-    <div class="flex items-center">
-      <h1 class="header min-width">Дата завершения</h1>
-      <p class="value">Сделать до 7 ноября, 2023</p>
-    </div>
-    <div class="flex items-center">
-      <h1 class="header min-width">Статус</h1>
-      <p class="value status-value">
-        <span class="circle blue-background"></span><span>В процессе</span>
-      </p>
-    </div>
-    <div class="control-buttons-container">
-      <button
-              class="button circle-button pink-background flex justify-center items-center"
-      >
-        <iconify-icon
-                icon="material-symbols:edit-rounded"
-                style="color: black"
-                width="24"
-                height="24"
-        ></iconify-icon>
-      </button>
-      <button
-              id="delete-task-cta"
-              class="button circle-button pink-background flex justify-center items-center"
-      >
-        <iconify-icon
-                icon="ic:round-delete"
-                style="color: black"
-                width="24"
-                height="24"
-        ></iconify-icon>
-      </button>
-    </div>
+    <div class="task-info"></div>
   </div>
 </div>
 <script src="https://code.iconify.design/iconify-icon/1.0.5/iconify-icon.min.js"></script>

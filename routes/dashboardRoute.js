@@ -44,7 +44,7 @@ dashboardRoute.post('/dashboard', taskValidation, async (req, res) => {
     }
 });
 
-dashboardRoute.get('/dashboard/getNotes', async (req, res) => {
+dashboardRoute.get('/dashboard/getTasks', async (req, res) => {
     const token = (req.headers.authorization || '').replace(/Bearer\s?/, '');
     const decoded = jwt.verify(token, PRIVATE_KEY);
 
@@ -59,7 +59,7 @@ dashboardRoute.get('/dashboard/getNotes', async (req, res) => {
     }
 });
 
-dashboardRoute.delete('/dashboard/deleteNote', async (req, res) => {
+dashboardRoute.delete('/dashboard/deleteTask', async (req, res) => {
     console.log(req.body);
 
     try {

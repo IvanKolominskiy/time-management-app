@@ -26,21 +26,11 @@ async function sendAddTaskRequest() {
     return { status: response.status, data: data };
 }
 
-function exit() {
-    const results = document.cookie.match(/token=(.+?)(;|$)/);
-    if (results) {
-        const token = results[1];
-        document.cookie = "token=" + token + "; max-age=0";
-    }
-
-    window.location.replace('/');
-}
-
 async function sendGetNotesRequest() {
     const results = document.cookie.match(/token=(.+?)(;|$)/);
     const token = results[1];
 
-    const response = await fetch("/dashboard/getNotes", {
+    const response = await fetch("/dashboard/getTasks", {
         method: 'GET',
         headers: {
             'Authorization': token
@@ -49,6 +39,16 @@ async function sendGetNotesRequest() {
 
     const data = await response.json();
     return data;
+}
+
+function exit() {
+    const results = document.cookie.match(/token=(.+?)(;|$)/);
+    if (results) {
+        const token = results[1];
+        document.cookie = "token=" + token + "; max-age=0";
+    }
+
+    window.location.replace('/');
 }
 
 function checkAuth() {
@@ -65,22 +65,6 @@ async function showInfo(id){
 
     const notesInfoContainer = document.querySelector('.task-info');
     notesInfoContainer.innerHTML = currentInfo;
-}
-
-async function deleteNote(index) {
-    await fetch('/dashboard/deleteNote', {
-        method: 'DELETE',
-        body: JSON.stringify({id: tasks[index]._id}),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    });
-
-    tasks.splice(index, 1);
-    tasksInfo.splice(index, 1);
-    tasksViews.splice(index, 1);
-
-    showNotes(false);
 }
 
 function showNotes(mainPageFlag) {
@@ -101,6 +85,22 @@ function showNotes(mainPageFlag) {
     if (!mainPageFlag) {
         window.location.replace('/dashboard');
     }
+}
+
+async function deleteNote(index) {
+    await fetch('/dashboard/deleteTask', {
+        method: 'DELETE',
+        body: JSON.stringify({id: tasks[index]._id}),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+    tasks.splice(index, 1);
+    tasksInfo.splice(index, 1);
+    tasksViews.splice(index, 1);
+
+    showNotes(false);
 }
 
 checkAuth();

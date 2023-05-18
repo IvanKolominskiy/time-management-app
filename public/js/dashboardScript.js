@@ -51,6 +51,10 @@ async function sendGetNotesRequest() {
     return data;
 }
 
+async function updateData() {
+    window.location.replace('/dashboard');
+}
+
 async function checkAuth() {
     const results = document.cookie.match(/token=(.+?)(;|$)/);
 
@@ -109,6 +113,7 @@ const notification = document.getElementById("notification");
 let activeOverlay = null;
 
 const addTaskButton = document.getElementById("add-task-button");
+const exitButton = document.getElementById("exit-button");
 
 radioViewOptions.forEach((radioButton) => {
     radioButton.addEventListener("change", (event) => {
@@ -203,3 +208,4 @@ addTaskButton.addEventListener("click", async () => {
     document.querySelector('#due-date-month').value = '';
     document.querySelector('#due-date-year').value = '';
 });
+

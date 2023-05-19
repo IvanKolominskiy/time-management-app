@@ -46,13 +46,11 @@
     }
 
     .row {
-        /* bring columns beside each other */
         display: flex;
     }
 
     .left-column,
     .right-column {
-        /* equal-width columns */
         width: 50%;
     }
 }

@@ -1,5 +1,4 @@
 body.overflow-hidden {
-    /* disable scrolling only when overlay is open */
     overflow: hidden;
 }
 
@@ -7,7 +6,6 @@ body.overflow-hidden {
     padding-block: 32px;
 }
 
-/* header */
 .header .title {
     font-weight: 600;
     font-size: 24px;
@@ -22,7 +20,6 @@ body.overflow-hidden {
     font-weight: 600;
 }
 
-/* radio buttons for view options */
 .radio-buttons-container {
     border-top: 2px solid black;
     border-bottom: 2px solid black;
@@ -50,18 +47,14 @@ body.overflow-hidden {
 }
 
 .radio-input {
-    /* hide */
     appearance: none;
-    /* remove from document flow */
     position: absolute;
 }
 
-/* direct sibling */
 .radio-buttons-container .radio-input:checked + .radio-label {
     background-color: pink;
 }
 
-/* lists view */
 .list-view.hide {
     display: none;
 }
@@ -112,7 +105,6 @@ body.overflow-hidden {
 
 .list-view .task-item .task-button {
     display: grid;
-    /* 3 equal columns */
     grid-template-columns: repeat(3, 1fr);
 }
 
@@ -130,7 +122,6 @@ body.overflow-hidden {
 }
 
 .list-view .task-item .task-name {
-    /* expands two columns */
     grid-column: 1 / 3;
 }
 
@@ -142,7 +133,6 @@ body.overflow-hidden {
 
 .list-view .task-item .task-due-date {
     grid-column: 1 / 3;
-    /* second row */
     grid-row: 2 / 3;
 }
 
@@ -151,27 +141,20 @@ body.overflow-hidden {
 }
 
 .list-view .task-item .arrow-icon {
-    /* last column */
     grid-column: 3 / 4;
-    /* expands two rows */
     grid-row: 1 / 3;
-    /* full height */
     height: 100%;
-    /* vertical center */
     display: flex;
     align-items: center;
 }
 
-/* board view */
 .board-view {
     margin-top: 32px;
-    /* enable horizontal scroll when needed */
     overflow-x: auto;
     padding: 0 8px 8px;
     display: grid;
     grid-template-columns: repeat(3, minmax(266px, 1fr));
     column-gap: 24px;
-    /* hide scrollbars in Firefox */
     scrollbar-width: none;
 }
 
@@ -179,8 +162,6 @@ body.overflow-hidden {
     display: none;
 }
 
-/* hide scrollbars without impacting scrolling */
-/* Chrome, Safari, Opera, and other WebKit-based browsers */
 .board-view::-webkit-scrollbar {
     display: none;
 }
@@ -211,7 +192,6 @@ body.overflow-hidden {
     padding: 24px 16px;
 }
 
-/* overlay */
 .overlay {
     width: 100%;
     height: 100%;
@@ -223,7 +203,6 @@ body.overflow-hidden {
     padding: 48px 32px 32px;
     display: grid;
     place-items: center;
-    /* if content is longer than screen height, enable scrollbar */
     overflow-y: auto;
 }
 
@@ -236,7 +215,6 @@ body.overflow-hidden {
     border-radius: 8px;
     padding: 32px;
     max-width: 654px;
-    /* to position close button */
     position: relative;
 }
 
@@ -290,9 +268,7 @@ body.overflow-hidden {
 }
 
 .notification {
-    /* relative to body */
-    position: fixed; /* fixed even on scroll */
-    /* hide */
+    position: fixed;
     top: -100%;
     left: 50%;
     transform: translateX(-50%);
@@ -313,29 +289,23 @@ body.overflow-hidden {
     top: 0;
 }
 
-/* media queries */
 @media (min-width: 768px) {
     .list-view .task-item .task-button {
-        /* align items to top in firefox */
         align-items: start;
     }
 
     .list-view .task-item .task-name {
-        /* expands first column */
         grid-column: 1 / 2;
     }
 
     .list-view .task-item .task-due-date {
-        /* expands second column */
         grid-column: 2 / 3;
-        /* back to default */
-        grid-row: auto / auto; /* start / end */
+        grid-row: auto / auto;
         margin-top: 0;
         text-align: center;
     }
 
     .list-view .task-item .arrow-icon {
-        /* back to default */
         grid-row: auto / auto;
         height: auto;
     }

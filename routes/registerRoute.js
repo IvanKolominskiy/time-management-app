@@ -11,7 +11,7 @@ export const registerRoute = new Router();
 const __dirname = path.resolve();
 
 registerRoute.get('/main', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'register.html'));
+    res.sendFile(path.join(__dirname, 'views', 'main.html'));
 });
 
 

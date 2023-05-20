@@ -9,7 +9,7 @@ async function sendRegisterRequest() {
         'Content-Type': 'application/json'
     }
 
-    const response = await fetch('/main', {
+    const response = await fetch('/', {
         method: 'POST',
         body: JSON.stringify(body),
         headers: headers

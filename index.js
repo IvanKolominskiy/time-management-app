@@ -1,7 +1,6 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import {registerRoute} from "./routes/registerRoute.js";
-import {homeRoute} from "./routes/homeRoute.js";
+import {mainRoute} from "./routes/mainRoute.js";
 import {loginRoute} from "./routes/loginRoute.js";
 import {dashboardRoute} from "./routes/dashboardRoute.js";
 import {DB_LOGIN, DB_PASSWORD} from "./secrets.js";
@@ -11,8 +10,7 @@ const app = express();
 
 app.use(express.json());
 
-app.use(registerRoute);
-app.use(homeRoute);
+app.use(mainRoute);
 app.use(loginRoute);
 app.use(dashboardRoute);
 

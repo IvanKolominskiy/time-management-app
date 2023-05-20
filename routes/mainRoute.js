@@ -7,15 +7,15 @@ import jwt from "jsonwebtoken";
 import path from 'path';
 import {PRIVATE_KEY} from "../secrets.js";
 
-export const registerRoute = new Router();
+export const mainRoute = new Router();
 const __dirname = path.resolve();
 
-registerRoute.get('/main', (req, res) => {
+mainRoute.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'main.html'));
 });
 
 
-registerRoute.post('/main', registerValidation, async (req, res) => {
+mainRoute.post('/', registerValidation, async (req, res) => {
     console.log(req.body);
 
     try {

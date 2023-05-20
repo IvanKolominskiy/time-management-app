@@ -188,6 +188,39 @@ let activeOverlay = null;
 
 const addTaskButton = document.getElementById("add-task-button");
 
+const basketStatusButton = document.getElementById("basket-radio");
+const pendingStatusButton = document.getElementById("pending-radio");
+const currentStatusButton = document.getElementById("current-radio");
+const nearestStatusButton = document.getElementById("nearest-radio");
+
+let currentStatusName = "<span>Корзина<span>";
+const statusNameContainer = document.querySelector(".status-name");
+statusNameContainer.innerHTML = currentStatusName;
+
+basketStatusButton.addEventListener("click", () => {
+    currentStatusName = "<span>Корзина<span>";
+    statusNameContainer.innerHTML = currentStatusName;
+    statusDropdown.classList.toggle("hide");
+});
+
+pendingStatusButton.addEventListener("click", () => {
+    currentStatusName = "<span>Отложенное<span>";
+    statusNameContainer.innerHTML = currentStatusName;
+    statusDropdown.classList.toggle("hide");
+});
+
+currentStatusButton.addEventListener("click", () => {
+    currentStatusName = "<span>Текущее<span>";
+    statusNameContainer.innerHTML = currentStatusName;
+    statusDropdown.classList.toggle("hide");
+});
+
+nearestStatusButton.addEventListener("click", () => {
+    currentStatusName = "<span>Ближайшее<span>";
+    statusNameContainer.innerHTML = currentStatusName;
+    statusDropdown.classList.toggle("hide");
+});
+
 radioViewOptions.forEach((radioButton) => {
     radioButton.addEventListener("change", (event) => {
         const eventTarget = event.target;

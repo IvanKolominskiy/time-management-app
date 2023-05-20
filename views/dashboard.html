@@ -367,7 +367,7 @@
               id="status-select"
               class="status-select white-background flex items-center justify-between cursor-pointer"
       >
-        <span>Начать</span>
+        <div class="status-name"></div>
         <iconify-icon
                 icon="material-symbols:arrow-back-ios-rounded"
                 style="color: black"
@@ -383,37 +383,49 @@
         <li>
           <input
                   type="radio"
-                  id="to-do-radio"
+                  id="basket-radio"
                   name="status-option"
                   value="To do"
                   class="radio-input"
           />
-          <label for="to-do-radio" class="radio-label">
-            <span class="circle pink-background"></span><span>Начать</span>
+          <label for="basket-radio" class="radio-label">
+            <span class="circle"></span><span>Корзина</span>
           </label>
         </li>
         <li>
           <input
                   type="radio"
-                  id="doing-radio"
+                  id="current-radio"
                   name="status-option"
                   value="Doing"
                   class="radio-input"
           />
-          <label for="doing-radio" class="radio-label">
-            <span class="circle blue-background"></span><span>В процессе</span>
+          <label for="current-radio" class="radio-label">
+            <span class="circle blue-background"></span><span>Текущее</span>
           </label>
         </li>
         <li>
           <input
                   type="radio"
-                  id="done-radio"
+                  id="nearest-radio"
                   name="status-option"
                   value="Done"
                   class="radio-input"
           />
-          <label for="done-radio" class="radio-label">
-            <span class="circle green-background"></span><span>Готово</span>
+          <label for="nearest-radio" class="radio-label">
+            <span class="circle green-background"></span><span>Ближайшее</span>
+          </label>
+        </li>
+        <li>
+          <input
+                  type="radio"
+                  id="pending-radio"
+                  name="status-option"
+                  value="To do"
+                  class="radio-input"
+          />
+          <label for="pending-radio" class="radio-label">
+            <span class="circle pink-background"></span><span>Отложенное</span>
           </label>
         </li>
       </ul>

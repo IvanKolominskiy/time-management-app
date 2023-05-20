@@ -27,7 +27,7 @@ async function sendAddTaskRequest() {
     return { status: response.status, data: data };
 }
 
-async function sendGetNotesRequest() {
+async function sendGetTasksRequest() {
     const results = document.cookie.match(/token=(.+?)(;|$)/);
     const token = results[1];
 
@@ -86,33 +86,33 @@ function checkAuth() {
 async function showInfo(id){
     const currentInfo = tasksInfo[id];
 
-    const notesInfoContainer = document.querySelector('.task-info');
-    notesInfoContainer.innerHTML = currentInfo;
+    const tasksInfoContainer = document.querySelector('.task-info');
+    tasksInfoContainer.innerHTML = currentInfo;
 }
 
-function showNotes(mainPageFlag) {
+function showTasks(mainPageFlag) {
     const tasksLength = tasks.length - 1;
 
     tasksViews.reverse().forEach((el, index) => {
-        let noteContainer;
+        let taskContainer;
 
         if (tasks[tasksLength - index].status === "Отложенное") {
-            noteContainer = document.querySelector(".tasks-list-pending");
+            taskContainer = document.querySelector(".tasks-list-pending");
         }
 
         if (tasks[tasksLength - index].status === "Ближайшее") {
-            noteContainer = document.querySelector(".tasks-list-nearest");
+            taskContainer = document.querySelector(".tasks-list-nearest");
         }
 
         if (tasks[tasksLength - index].status === "Текущее") {
-            noteContainer = document.querySelector(".tasks-list-current");
+            taskContainer = document.querySelector(".tasks-list-current");
         }
 
         if (tasks[tasksLength - index].status === "Корзина") {
-            noteContainer = document.querySelector(".tasks-list");
+            taskContainer = document.querySelector(".tasks-list");
         }
 
-        noteContainer.innerHTML += el;
+        taskContainer.innerHTML += el;
     });
 
     const taskItems = document.querySelectorAll(`.task-item`);
@@ -129,7 +129,7 @@ function showNotes(mainPageFlag) {
     }
 }
 
-async function deleteNote(index) {
+async function deleteTask(index) {
     await fetch('/dashboard/deleteTask', {
         method: 'DELETE',
         body: JSON.stringify({id: tasks[index]._id}),
@@ -142,7 +142,7 @@ async function deleteNote(index) {
     tasksInfo.splice(index, 1);
     tasksViews.splice(index, 1);
 
-    showNotes(false);
+    showTasks(false);
 }
 
 async function editTask(index) {
@@ -174,7 +174,7 @@ async function editTask(index) {
     const editTaskButton = document.getElementById("edit-task-button");
     editTaskButton.addEventListener("click", async () => {
         await sendEditRequest(tasks[index]._id);
-        showNotes(false);
+        showTasks(false);
     });
 }
 
@@ -184,10 +184,10 @@ let tasksInfo = [];
 let tasks = []
 let tasksViews = []
 
-const res = sendGetNotesRequest();
+const res = sendGetTasksRequest();
 res.then(data => {
     data.tasks.forEach((el, index) => {
-        const note = `
+        const task = `
         <li class="task-item">
             <button class="task-button" onclick="showInfo(${index})">
               <p class="task-name">${el.name}</p>
@@ -202,7 +202,7 @@ res.then(data => {
             </button>
         </li>`;
 
-        const noteInfo = `
+        const taskInfo = `
             <h1 class="header no-margin">Имя</h1>
             <p class="value">${el.name}</p>
             <h1 class="header">Описание</h1>
@@ -234,7 +234,7 @@ res.then(data => {
               <button
                       id="delete-task-cta"
                       class="button circle-button pink-background flex justify-center items-center"
-                      onclick="deleteNote(${index})"
+                      onclick="deleteTask(${index})"
               >
                 <iconify-icon
                         icon="ic:round-delete"
@@ -245,11 +245,11 @@ res.then(data => {
               </button>
             </div>`
 
-        tasksViews.push(note);
-        tasksInfo.push(noteInfo);
+        tasksViews.push(task);
+        tasksInfo.push(taskInfo);
         tasks.push(el);
     });
-    showNotes(true);
+    showTasks(true);
 });
 
 const radioViewOptions = document.querySelectorAll("input[name='view-option']");

@@ -83,7 +83,7 @@ function checkAuth() {
     }
 }
 
-async function showInfo(id){
+function showInfo(id){
     const currentInfo = tasksInfo[id];
 
     const tasksInfoContainer = document.querySelector('.task-info');

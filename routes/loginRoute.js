@@ -8,7 +8,7 @@ import {PRIVATE_KEY} from "../secrets.js";
 export const loginRoute = new Router();
 const __dirname = path.resolve();
 
-loginRoute.get('/login', (req, res) => {
+loginRoute.get('/login', async (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'login.html'));
 });
 

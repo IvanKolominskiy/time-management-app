@@ -9,7 +9,7 @@ import {PRIVATE_KEY} from "../secrets.js";
 export const dashboardRoute = new Router();
 const __dirname = path.resolve();
 
-dashboardRoute.get('/dashboard', (req, res) => {
+dashboardRoute.get('/dashboard', async (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'dashboard.html'));
 });
 

@@ -10,7 +10,7 @@ import {PRIVATE_KEY} from "../secrets.js";
 export const mainRoute = new Router();
 const __dirname = path.resolve();
 
-mainRoute.get('/', (req, res) => {
+mainRoute.get('/', async (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'main.html'));
 });
 

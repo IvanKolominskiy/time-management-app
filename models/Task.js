@@ -5,22 +5,10 @@ const TaskSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    description: {
-        type: String,
-        required: true
-    },
-    deadlineDay: {
-        type: String,
-        required:true
-    },
-    deadlineMonth: {
-        type: String,
-        required: true
-    },
-    deadlineYear: {
-        type: String,
-        required: true
-    },
+    description: String,
+    deadlineDay: String,
+    deadlineMonth: String,
+    deadlineYear: String,
     status: {
         type: String,
         required: true

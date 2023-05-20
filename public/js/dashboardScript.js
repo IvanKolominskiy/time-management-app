@@ -178,6 +178,37 @@ async function editTask(index) {
     });
 }
 
+function checkDate(day, month, year) {
+    if (month <= 0 || month > 12) {
+        return "";
+    }
+
+    const months = ["Января", "Февраля", "Марта", "Апреля", "Мая", "Июня", "Июля", "Августа",
+                            "Сентября", "Октябрь", "Ноября", "Декабря"];
+
+    if (day && month && year) {
+        return `Сделать до ${day} ${months[month - 1]} ${year}`;
+    }
+
+    if (day && month) {
+        return `Сделать до ${day} ${months[month - 1]}`;
+    }
+
+    if (month && year) {
+        return `Сделать до ${months[month - 1]} ${year}`;
+    }
+
+    if (month) {
+        return `Сделать до ${months[month - 1]}`;
+    }
+
+    if (year) {
+        return `Сделать до ${year}`;
+    }
+
+    return "";
+}
+
 checkAuth();
 
 let tasksInfo = [];
@@ -187,11 +218,13 @@ let tasksViews = []
 const res = sendGetTasksRequest();
 res.then(data => {
     data.tasks.forEach((el, index) => {
+        const date = checkDate(el.deadlineDay, el.deadlineMonth, el.deadlineYear);
+
         const task = `
         <li class="task-item">
             <button class="task-button" onclick="showInfo(${index})">
               <p class="task-name">${el.name}</p>
-              <p class="task-due-date">Сделать до ${el.deadlineDay}.${el.deadlineMonth}.${el.deadlineYear}</p>
+              <p class="task-due-date">${date}</p>
               <iconify-icon
                       icon="material-symbols:arrow-back-ios-rounded"
                       style="color: black"
@@ -211,7 +244,7 @@ res.then(data => {
             </p>
             <div class="flex items-center">
               <h1 class="header min-width">Дата завершения</h1>
-              <p class="value">${el.deadlineDay}.${el.deadlineMonth}.${el.deadlineYear}</p>
+              <p class="value">${date}</p>
             </div>
             <div class="flex items-center">
               <h1 class="header min-width">Статус</h1>

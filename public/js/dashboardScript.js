@@ -78,8 +78,8 @@ function checkAuth() {
     const results = document.cookie.match(/token=(.+?)(;|$)/);
 
     if (!results) {
-        alert('Please login or register first');
-        window.location.replace('/register');
+        alert('Войдите или зарегистрируйтесь');
+        window.location.replace('/');
     }
 }
 
@@ -340,7 +340,7 @@ addTaskCTA.addEventListener("click", () => {
         }
 
         if (res.status === 200) {
-            alert('The task was successfully created');
+            alert('Задача успешно создана');
         }
 
         document.querySelector('#name').value = '';

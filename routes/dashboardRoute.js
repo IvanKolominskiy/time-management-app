@@ -66,7 +66,7 @@ dashboardRoute.delete('/dashboard/deleteTask', async (req, res) => {
     try {
         const taskId = req.body.id;
 
-        TaskModel.findOneAndDelete({_id: taskId})
+        await TaskModel.findOneAndDelete({_id: taskId})
             .then((doc) => {
                 if (!doc) {
                     return res.status(404).json({
@@ -90,4 +90,28 @@ dashboardRoute.delete('/dashboard/deleteTask', async (req, res) => {
             message: 'Не удалось удалить задачу',
         });
     }
+});
+
+dashboardRoute.patch('/dashboard/editTask', taskValidation, async (req, res) => {
+    console.log(req.body);
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({errors: errors.array()});
+    }
+
+    await TaskModel.updateOne(
+{
+        _id: req.body.id
+     },
+{
+      name: req.body.name,
+      description: req.body.description,
+      deadlineDay: req.body.deadlineDay,
+      deadlineMonth: req.body.deadlineMonth,
+      deadlineYear: req.body.deadlineYear,
+      status: req.body.status
+     });
+
+     res.json({success: true});
 });

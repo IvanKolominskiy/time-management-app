@@ -42,6 +42,28 @@ async function sendGetNotesRequest() {
     return data;
 }
 
+async function sendEditRequest(taskId) {
+    const body = {
+        name: document.querySelector('#name').value,
+        description: document.querySelector('#description').value,
+        deadlineDay: document.querySelector('#due-date-day').value,
+        deadlineMonth: document.querySelector('#due-date-month').value,
+        deadlineYear: document.querySelector('#due-date-year').value,
+        status: currentStatusName,
+        id: taskId
+    };
+
+    const headers = {
+        'Content-Type': 'application/json'
+    }
+
+   await fetch('/dashboard/editTask', {
+        method: 'PATCH',
+        body: JSON.stringify(body),
+        headers: headers
+    });
+}
+
 function exit() {
     const results = document.cookie.match(/token=(.+?)(;|$)/);
     if (results) {
@@ -123,6 +145,39 @@ async function deleteNote(index) {
     showNotes(false);
 }
 
+async function editTask(index) {
+    document.querySelector(".overlay-name").innerHTML = "<h1 class=\"header\">Изменить задачу</h1>";
+    document.querySelector(".button-name").innerHTML =
+        `<button
+                type="submit"
+                class="button regular-button green-background cta-button"
+                id="edit-task-button"
+        >
+          Изменить задачу
+        </button>`
+
+    document.querySelector('#name').value = tasks[index].name;
+    document.querySelector('#description').value = tasks[index].description;
+    document.querySelector('#due-date-day').value = tasks[index].deadlineDay;
+    document.querySelector('#due-date-month').value = tasks[index].deadlineMonth;
+    document.querySelector('#due-date-year').value = tasks[index].deadlineYear;
+
+    currentStatusName = tasks[index].status
+    statusNameContainer.innerHTML = "<span>" + currentStatusName + "</span>";
+
+    activeOverlay.classList.add("hide");
+
+    const editTaskOverlay = document.getElementById( "set-task-overlay");
+    editTaskOverlay.classList.remove("hide");
+    activeOverlay = editTaskOverlay;
+
+    const editTaskButton = document.getElementById("edit-task-button");
+    editTaskButton.addEventListener("click", async () => {
+        await sendEditRequest(tasks[index]._id);
+        showNotes(false);
+    });
+}
+
 checkAuth();
 
 let tasksInfo = [];
@@ -167,6 +222,7 @@ res.then(data => {
             <div class="control-buttons-container">
               <button
                       class="button circle-button pink-background flex justify-center items-center"
+                      onclick="editTask(${index})"
               >
                 <iconify-icon
                         icon="material-symbols:edit-rounded"
@@ -195,6 +251,7 @@ res.then(data => {
     });
     showNotes(true);
 });
+
 const radioViewOptions = document.querySelectorAll("input[name='view-option']");
 const listView = document.getElementById("list-view");
 const boardView = document.getElementById("board-view");
@@ -205,8 +262,6 @@ const statusSelect = document.getElementById("status-select");
 const statusDropdown = document.getElementById("status-dropdown");
 const viewTaskOverlay = document.getElementById("view-task-overlay");
 let activeOverlay = null;
-
-const addTaskButton = document.getElementById("add-task-button");
 
 const basketStatusButton = document.getElementById("basket-radio");
 const pendingStatusButton = document.getElementById("pending-radio");
@@ -260,6 +315,42 @@ radioViewOptions.forEach((radioButton) => {
 });
 
 addTaskCTA.addEventListener("click", () => {
+    document.querySelector(".overlay-name").innerHTML = "<h1 class=\"header\">Добавить задачу</h1>";
+    document.querySelector(".button-name").innerHTML =
+        `<button
+                type="submit"
+                class="button regular-button green-background cta-button"
+                id="add-task-button"
+        >
+          Добавить задачу
+        </button>`
+
+    const addTaskButton = document.getElementById("add-task-button");
+    addTaskButton.addEventListener("click", async () => {
+        const res = await sendAddTaskRequest();
+
+        if (res.status === 400) {
+            let errors = '';
+            res.data.errors.forEach((el) => errors = errors + el.msg + '\n');
+            alert(errors);
+        }
+
+        if (res.status === 500) {
+            alert(res.data.message);
+        }
+
+        if (res.status === 200) {
+            alert('The task was successfully created');
+        }
+
+        document.querySelector('#name').value = '';
+        document.querySelector('#description').value = '';
+        document.querySelector('#due-date-day').value = '';
+        document.querySelector('#due-date-month').value = '';
+        document.querySelector('#due-date-year').value = '';
+    });
+
+
     setTaskOverlay.classList.remove("hide");
     activeOverlay = setTaskOverlay;
     document.body.classList.add("overflow-hidden");
@@ -275,29 +366,5 @@ closeButtons.forEach((button) => {
 
 statusSelect.addEventListener("click", () => {
     statusDropdown.classList.toggle("hide");
-});
-
-addTaskButton.addEventListener("click", async () => {
-    const res = await sendAddTaskRequest();
-
-    if (res.status === 400) {
-        let errors = '';
-        res.data.errors.forEach((el) => errors = errors + el.msg + '\n');
-        alert(errors);
-    }
-
-    if (res.status === 500) {
-        alert(res.data.message);
-    }
-
-    if (res.status === 200) {
-        alert('The task was successfully created');
-    }
-
-    document.querySelector('#name').value = '';
-    document.querySelector('#description').value = '';
-    document.querySelector('#due-date-day').value = '';
-    document.querySelector('#due-date-month').value = '';
-    document.querySelector('#due-date-year').value = '';
 });
 

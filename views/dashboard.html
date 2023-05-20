@@ -103,44 +103,44 @@
         </h2>
         <ul class="tasks-list-nearest green"></ul>
       </div>
-      <div>
-        <h2 class="list-header">
-              <span class="circle red-background"></span
-              ><span class="text">Проекты</span>
-        </h2>
-        <ul class="tasks-list-projects green">
-          <li class="task-item">
-            <button class="task-button">
-              <div>
-                <p class="task-name">Design UI</p>
-                <p class="task-due-date">Сделать до 7 ноября, 2023</p>
-              </div>
-              <iconify-icon
-                      icon="material-symbols:arrow-back-ios-rounded"
-                      style="color: black"
-                      width="18"
-                      height="18"
-                      class="arrow-icon"
-              ></iconify-icon>
-            </button>
-          </li>
-          <li class="task-item">
-            <button class="task-button">
-              <div>
-                <p class="task-name">Design UI</p>
-                <p class="task-due-date">Сделать до 7 ноября, 2023</p>
-              </div>
-              <iconify-icon
-                      icon="material-symbols:arrow-back-ios-rounded"
-                      style="color: black"
-                      width="18"
-                      height="18"
-                      class="arrow-icon"
-              ></iconify-icon>
-            </button>
-          </li>
-        </ul>
-      </div>
+<!--      <div>-->
+<!--        <h2 class="list-header">-->
+<!--              <span class="circle red-background"></span-->
+<!--              ><span class="text">Проекты</span>-->
+<!--        </h2>-->
+<!--        <ul class="tasks-list-projects green">-->
+<!--          <li class="task-item">-->
+<!--            <button class="task-button">-->
+<!--              <div>-->
+<!--                <p class="task-name">Design UI</p>-->
+<!--                <p class="task-due-date">Сделать до 7 ноября, 2023</p>-->
+<!--              </div>-->
+<!--              <iconify-icon-->
+<!--                      icon="material-symbols:arrow-back-ios-rounded"-->
+<!--                      style="color: black"-->
+<!--                      width="18"-->
+<!--                      height="18"-->
+<!--                      class="arrow-icon"-->
+<!--              ></iconify-icon>-->
+<!--            </button>-->
+<!--          </li>-->
+<!--          <li class="task-item">-->
+<!--            <button class="task-button">-->
+<!--              <div>-->
+<!--                <p class="task-name">Design UI</p>-->
+<!--                <p class="task-due-date">Сделать до 7 ноября, 2023</p>-->
+<!--              </div>-->
+<!--              <iconify-icon-->
+<!--                      icon="material-symbols:arrow-back-ios-rounded"-->
+<!--                      style="color: black"-->
+<!--                      width="18"-->
+<!--                      height="18"-->
+<!--                      class="arrow-icon"-->
+<!--              ></iconify-icon>-->
+<!--            </button>-->
+<!--          </li>-->
+<!--        </ul>-->
+<!--      </div>-->
     </div>
   </div>
 </div>
@@ -157,7 +157,7 @@
               height="26"
       ></iconify-icon>
     </button>
-    <h1 class="header">Добавить задачу</h1>
+    <div class="overlay-name"></div>
     <iframe name="votar" style="display: none"></iframe>
     <form class="form" autocomplete="off" target="votar">
       <label for="name" class="label">Имя</label>
@@ -277,13 +277,7 @@
         </li>
       </ul>
       <div class="text-center">
-        <button
-                type="submit"
-                class="button regular-button green-background cta-button"
-                id="add-task-button"
-        >
-          Добавить задачу
-        </button>
+        <div class="button-name"></div>
       </div>
     </form>
   </div>

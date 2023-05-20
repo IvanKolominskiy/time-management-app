@@ -69,8 +69,27 @@ async function showInfo(id){
 }
 
 function showNotes(mainPageFlag) {
-    tasksViews.reverse().forEach((el) => {
-        let noteContainer = document.querySelector(".tasks-list");
+    const tasksLength = tasks.length - 1;
+
+    tasksViews.reverse().forEach((el, index) => {
+        let noteContainer;
+
+        if (tasks[tasksLength - index].status === "Отложенное") {
+            noteContainer = document.querySelector(".tasks-list-pending");
+        }
+
+        if (tasks[tasksLength - index].status === "Ближайшее") {
+            noteContainer = document.querySelector(".tasks-list-nearest");
+        }
+
+        if (tasks[tasksLength - index].status === "Текущее") {
+            noteContainer = document.querySelector(".tasks-list-current");
+        }
+
+        if (tasks[tasksLength - index].status === "Корзина") {
+            noteContainer = document.querySelector(".tasks-list");
+        }
+
         noteContainer.innerHTML += el;
     });
 

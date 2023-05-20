@@ -38,8 +38,7 @@ async function sendGetTasksRequest() {
         }
     });
 
-    const data = await response.json();
-    return data;
+    return await response.json();
 }
 
 async function sendEditRequest(taskId) {
@@ -57,79 +56,20 @@ async function sendEditRequest(taskId) {
         'Content-Type': 'application/json'
     }
 
-   await fetch('/dashboard/editTask', {
+   const response = await fetch('/dashboard/editTask', {
         method: 'PATCH',
         body: JSON.stringify(body),
         headers: headers
     });
-}
 
-function exit() {
-    const results = document.cookie.match(/token=(.+?)(;|$)/);
-    if (results) {
-        const token = results[1];
-        document.cookie = "token=" + token + "; max-age=0";
-    }
+    const data = await response.json();
 
-    window.location.replace('/');
-}
-
-function checkAuth() {
-    const results = document.cookie.match(/token=(.+?)(;|$)/);
-
-    if (!results) {
-        alert('Войдите или зарегистрируйтесь');
-        window.location.replace('/');
-    }
-}
-
-function showInfo(id){
-    const currentInfo = tasksInfo[id];
-
-    const tasksInfoContainer = document.querySelector('.task-info');
-    tasksInfoContainer.innerHTML = currentInfo;
-}
-
-function showTasks(mainPageFlag) {
-    const tasksLength = tasks.length - 1;
-
-    tasksViews.reverse().forEach((el, index) => {
-        let taskContainer;
-
-        if (tasks[tasksLength - index].status === "Отложенное") {
-            taskContainer = document.querySelector(".tasks-list-pending");
-        }
-
-        if (tasks[tasksLength - index].status === "Ближайшее") {
-            taskContainer = document.querySelector(".tasks-list-nearest");
-        }
-
-        if (tasks[tasksLength - index].status === "Текущее") {
-            taskContainer = document.querySelector(".tasks-list-current");
-        }
-
-        if (tasks[tasksLength - index].status === "Корзина") {
-            taskContainer = document.querySelector(".tasks-list");
-        }
-
-        taskContainer.innerHTML += el;
-    });
-
-    const taskItems = document.querySelectorAll(`.task-item`);
-    taskItems.forEach((task) => {
-        task.addEventListener("click", () => {
-            viewTaskOverlay.classList.remove("hide");
-            activeOverlay = viewTaskOverlay;
-            document.body.classList.add("overflow-hidden");
-        });
-    });
-
-    if (!mainPageFlag) {
-        window.location.replace('/dashboard');
-    }
+    return { status: response.status, data: data };
 }
 
 async function deleteTask(index) {
+    const tasks = JSON.parse(localStorage.getItem("tasks"));
+
     await fetch('/dashboard/deleteTask', {
         method: 'DELETE',
         body: JSON.stringify({id: tasks[index]._id}),
@@ -139,13 +79,20 @@ async function deleteTask(index) {
     });
 
     tasks.splice(index, 1);
-    tasksInfo.splice(index, 1);
-    tasksViews.splice(index, 1);
 
-    showTasks(false);
+    tasks.forEach((el, index) => {
+        el.taskView = makeTaskView(el, index);
+        el.taskInfo = makeTaskInfo(el, index);
+    });
+
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+
+    update();
 }
 
 async function editTask(index) {
+    const tasks = JSON.parse(localStorage.getItem("tasks"));
+
     document.querySelector(".overlay-name").innerHTML = "<h1 class=\"header\">Изменить задачу</h1>";
     document.querySelector(".button-name").innerHTML =
         `<button
@@ -173,8 +120,149 @@ async function editTask(index) {
 
     const editTaskButton = document.getElementById("edit-task-button");
     editTaskButton.addEventListener("click", async () => {
-        await sendEditRequest(tasks[index]._id);
-        showTasks(false);
+        const res = await sendEditRequest(tasks[index]._id);
+
+        if (res.status === 200) {
+            tasks[index] = res.data.task;
+
+            tasks[index].taskView = makeTaskView(tasks[index], index);
+            tasks[index].taskInfo = makeTaskInfo(tasks[index], index);
+
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+
+            update();
+        }
+
+        if (res.status === 500) {
+            alert(res.data.message);
+        }
+    });
+}
+
+function exit() {
+    const results = document.cookie.match(/token=(.+?)(;|$)/);
+    if (results) {
+        const token = results[1];
+        document.cookie = "token=" + token + "; max-age=0";
+        localStorage.removeItem("tasks");
+    }
+
+    window.location.replace('/');
+}
+
+function checkAuth() {
+    const results = document.cookie.match(/token=(.+?)(;|$)/);
+
+    if (!results) {
+        alert('Войдите или зарегистрируйтесь');
+        window.location.replace('/');
+    }
+}
+
+function makeTaskView(task, index) {
+    const date = checkDate(task.deadlineDay, task.deadlineMonth, task.deadlineYear);
+    return `<li class="task-item">
+            <button class="task-button" onclick="showInfo(${index})">
+              <p class="task-name">${task.name}</p>
+              <p class="task-due-date">${date}</p>
+              <iconify-icon
+                      icon="material-symbols:arrow-back-ios-rounded"
+                      style="color: black"
+                      width="18"
+                      height="18"
+                      class="arrow-icon"
+              ></iconify-icon>
+            </button>
+        </li>`;
+}
+
+function makeTaskInfo(task, index) {
+    const date = checkDate(task.deadlineDay, task.deadlineMonth, task.deadlineYear);
+
+    return `<h1 class="header no-margin">Имя</h1>
+    <p class="value">${task.name}</p>
+    <h1 class="header">Описание</h1>
+    <p class="value">
+        ${task.description}
+    </p>
+    <div class="flex items-center">
+        <h1 class="header min-width">Дата завершения</h1>
+        <p class="value">${date}</p>
+    </div>
+    <div class="flex items-center">
+        <h1 class="header min-width">Статус</h1>
+        <p class="value status-value">
+            <span class="circle"></span><span>${task.status}</span>
+        </p>
+    </div>
+    <div class="control-buttons-container">
+        <button
+            class="button circle-button pink-background flex justify-center items-center"
+            onclick="editTask(${index})"
+        >
+            <iconify-icon
+                icon="material-symbols:edit-rounded"
+                style="color: black"
+                width="24"
+                height="24"
+            ></iconify-icon>
+        </button>
+        <button
+            id="delete-task-cta"
+            class="button circle-button pink-background flex justify-center items-center"
+            onclick="deleteTask(${index})"
+        >
+            <iconify-icon
+                icon="ic:round-delete"
+                style="color: black"
+                width="24"
+                height="24"
+            ></iconify-icon>
+        </button>
+    </div>`
+}
+
+function showInfo(id){
+    const tasks = JSON.parse(localStorage.getItem("tasks"));
+
+    const currentInfo = tasks[id].taskInfo;
+
+    const tasksInfoContainer = document.querySelector('.task-info');
+    tasksInfoContainer.innerHTML = currentInfo;
+}
+
+function showTasks() {
+    const tasks = JSON.parse(localStorage.getItem("tasks"));
+
+    tasks.reverse().forEach((el, index) => {
+        let taskContainer;
+
+        if (tasks[index].status === "Отложенное") {
+            taskContainer = document.querySelector(".tasks-list-pending");
+        }
+
+        if (tasks[index].status === "Ближайшее") {
+            taskContainer = document.querySelector(".tasks-list-nearest");
+        }
+
+        if (tasks[index].status === "Текущее") {
+            taskContainer = document.querySelector(".tasks-list-current");
+        }
+
+        if (tasks[index].status === "Корзина") {
+            taskContainer = document.querySelector(".tasks-list");
+        }
+
+        taskContainer.innerHTML += el.taskView;
+    });
+
+    const taskItems = document.querySelectorAll(`.task-item`);
+    taskItems.forEach((task) => {
+        task.addEventListener("click", () => {
+            viewTaskOverlay.classList.remove("hide");
+            activeOverlay = viewTaskOverlay;
+            document.body.classList.add("overflow-hidden");
+        });
     });
 }
 
@@ -209,81 +297,31 @@ function checkDate(day, month, year) {
     return "";
 }
 
+function update() {
+    window.location.replace("/dashboard");
+}
+
 checkAuth();
 
-let tasksInfo = [];
-let tasks = []
-let tasksViews = []
+if (!localStorage.getItem("tasks")) {
+    const res = sendGetTasksRequest();
+    res.then(data => {
+        let tasks = [];
 
-const res = sendGetTasksRequest();
-res.then(data => {
-    data.tasks.forEach((el, index) => {
-        const date = checkDate(el.deadlineDay, el.deadlineMonth, el.deadlineYear);
+        data.tasks.forEach((el, index) => {
+            el.taskView = makeTaskView(el, index);
+            el.taskInfo = makeTaskInfo(el, index);
 
-        const task = `
-        <li class="task-item">
-            <button class="task-button" onclick="showInfo(${index})">
-              <p class="task-name">${el.name}</p>
-              <p class="task-due-date">${date}</p>
-              <iconify-icon
-                      icon="material-symbols:arrow-back-ios-rounded"
-                      style="color: black"
-                      width="18"
-                      height="18"
-                      class="arrow-icon"
-              ></iconify-icon>
-            </button>
-        </li>`;
+            tasks.push(el);
+        });
 
-        const taskInfo = `
-            <h1 class="header no-margin">Имя</h1>
-            <p class="value">${el.name}</p>
-            <h1 class="header">Описание</h1>
-            <p class="value">
-              ${el.description}
-            </p>
-            <div class="flex items-center">
-              <h1 class="header min-width">Дата завершения</h1>
-              <p class="value">${date}</p>
-            </div>
-            <div class="flex items-center">
-              <h1 class="header min-width">Статус</h1>
-              <p class="value status-value">
-                <span class="circle"></span><span>${el.status}</span>
-              </p>
-            </div>
-            <div class="control-buttons-container">
-              <button
-                      class="button circle-button pink-background flex justify-center items-center"
-                      onclick="editTask(${index})"
-              >
-                <iconify-icon
-                        icon="material-symbols:edit-rounded"
-                        style="color: black"
-                        width="24"
-                        height="24"
-                ></iconify-icon>
-              </button>
-              <button
-                      id="delete-task-cta"
-                      class="button circle-button pink-background flex justify-center items-center"
-                      onclick="deleteTask(${index})"
-              >
-                <iconify-icon
-                        icon="ic:round-delete"
-                        style="color: black"
-                        width="24"
-                        height="24"
-                ></iconify-icon>
-              </button>
-            </div>`
+        localStorage.setItem("tasks", JSON.stringify(tasks));
 
-        tasksViews.push(task);
-        tasksInfo.push(taskInfo);
-        tasks.push(el);
+        showTasks();
     });
-    showTasks(true);
-});
+} else {
+    showTasks();
+}
 
 const radioViewOptions = document.querySelectorAll("input[name='view-option']");
 const listView = document.getElementById("list-view");
@@ -374,6 +412,17 @@ addTaskCTA.addEventListener("click", () => {
 
         if (res.status === 200) {
             alert('Задача успешно создана');
+
+            const tasks = JSON.parse(localStorage.getItem("tasks"));
+
+            const currentTask = res.data.task;
+
+            currentTask.taskView = makeTaskView(currentTask, tasks.length);
+            currentTask.taskInfo = makeTaskInfo(currentTask, tasks.length);
+
+            tasks.push(currentTask);
+
+            localStorage.setItem("tasks", JSON.stringify(tasks));
         }
 
         document.querySelector('#name').value = '';

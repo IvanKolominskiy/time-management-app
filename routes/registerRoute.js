@@ -10,12 +10,12 @@ import {PRIVATE_KEY} from "../secrets.js";
 export const registerRoute = new Router();
 const __dirname = path.resolve();
 
-registerRoute.get('/register', (req, res) => {
+registerRoute.get('/main', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'register.html'));
 });
 
 
-registerRoute.post('/register', registerValidation, async (req, res) => {
+registerRoute.post('/main', registerValidation, async (req, res) => {
     console.log(req.body);
 
     try {

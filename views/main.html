@@ -1,98 +1,49 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns="http://www.w3.org/1999/html">
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="/css/style2.css">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;1,500&display=swap" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task Management System - Sign up page</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+            rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="/css/entry-page.css" />
+<!--    <script src="/js/registerScript.js"></script>-->
 </head>
 <body>
-<header class="header">
-    <nav class="navbar">
-        <a href="#">О методике</a>
-        <a href="#">Продукты</a>
-        <a href="#">Служба поддержки</a>
-    </nav>
-    <form action="" class="search-bar">
-        <input type="text" placeholder="Поиск...">
-        <button><i class='bx bx-search'></i></button>
-    </form>
-</header>
-<div class="background"></div>
-<div class="container">
-    <div class="item">
-        <h2 class="logo"><i class='bx bxl-xing'></i>GTD</h2>
-        <div class="text-item">
-            <h2>Добро пожаловать! <br><span>
-                    на наш сайт
-                </span></h2>
-        </div>
+<div class="row height-full">
+    <div
+            class="left-column flex flex-column height-full justify-center items-center"
+    >
+        <h1 class="welcoming-title">Добро пожаловать</h1>
+        <iframe name="votar" style="display: none"></iframe>
+        <form class="form" autocomplete="off" target="votar">
+            <label for="email" class="label">Email</label>
+            <input type="email" name="email" id="email" class="input" required />
+            <label for="login" class="label">Логин</label>
+            <input type="text" name="login" id="login" class="input" required />
+            <label for="password" class="label">Пароль</label>
+            <input type="password" name="password" id="password" class="input" required/>
+            <button
+                    id="register"
+                    type="submit"
+                    class="button regular-button pink-background cta-btn"
+            >
+                Зарегистрироваться
+            </button>
+        </form>
+        <p class="login-prompt">
+            Уже есть аккаунт?
+            <a href="/login" class="log-in-link">Войти</a>
+        </p>
     </div>
-    <div class="login-section">
-        <div class="form-box login">
-            <form action="">
-                <h2>Войти</h2>
-                <div class="input-box">
-                    <span class="icon"><i class='bx bxs-envelope'></i></span>
-                    <input type="email" required>
-                    <label >Email</label>
-                </div>
-                <div class="input-box">
-                    <span class="icon"><i class='bx bxs-lock-alt' ></i></span>
-                    <input type="password" required>
-                    <label>Пароль</label>
-                </div>
-                <div class="remember-password">
-                    <label for=""><input type="checkbox">Запомнить меня</label>
-                    <a href="#">Забыли пароль?</a>
-                </div>
-                <button class="btn">Войти</button>
-                <div class="create-account">
-                    <p>Создать новый аккаунт? <a href="#" class="register-link">Регистрация</a></p>
-                </div>
-            </form>
-        </div>
-        <div class="form-box register">
-            <form action="">
-
-                <h2>Регистрация</h2>
-
-                <div class="input-box">
-                    <span class="icon"><i class='bx bxs-user'></i></span>
-                    <input type="text" required>
-                    <label >Имя</label>
-                </div>
-                <div class="input-box">
-                    <span class="icon"><i class='bx bxs-envelope'></i></span>
-                    <input type="email" required>
-                    <label >Email</label>
-                </div>
-                <div class="input-box">
-                    <span class="icon"><i class='bx bxs-lock-alt' ></i></span>
-                    <input type="password" required>
-                    <label>Пароль</label>
-                </div>
-                <div class="remember-password">
-                    <label for=""><input type="checkbox">Я подтверждаю соглашение</label>
-                </div>
-                <button class="btn">Зарегистрироваться</button>
-                <div class="create-account">
-                    <p>Уже есть аккаунт? <a href="#" class="login-link">Войти</a></p>
-                </div>
-            </form>
-        </div>
-    </div>
+    <div class="right-column"></div>
 </div>
-<script>
-    const loginsec=document.querySelector('.login-section')
-    const loginlink=document.querySelector('.login-link')
-    const registerlink=document.querySelector('.register-link')
-    registerlink.addEventListener('click',()=>{
-        loginsec.classList.add('active')
-    })
-    loginlink.addEventListener('click',()=>{
-        loginsec.classList.remove('active')
-    })
-</script>
+<script src="/js/registerScript.js"></script>
 </body>
 </html>

@@ -31,6 +31,7 @@ dashboardRoute.post('/dashboard', taskValidation, async (req, res) => {
             deadlineDay: req.body.deadlineDay,
             deadlineMonth: req.body.deadlineMonth,
             deadlineYear: req.body.deadlineYear,
+            status: req.body.status,
             user: decoded._id
         });
 

@@ -7,7 +7,8 @@ async function sendAddTaskRequest() {
         description: document.querySelector('#description').value,
         deadlineDay: document.querySelector('#due-date-day').value,
         deadlineMonth: document.querySelector('#due-date-month').value,
-        deadlineYear: document.querySelector('#due-date-year').value
+        deadlineYear: document.querySelector('#due-date-year').value,
+        status: currentStatusName
     };
 
     const headers = {
@@ -136,12 +137,12 @@ res.then(data => {
             </p>
             <div class="flex items-center">
               <h1 class="header min-width">Дата завершения</h1>
-              <p class="value">Сделать до ${el.deadlineDay}.${el.deadlineMonth}.${el.deadlineYear}</p>
+              <p class="value">${el.deadlineDay}.${el.deadlineMonth}.${el.deadlineYear}</p>
             </div>
             <div class="flex items-center">
               <h1 class="header min-width">Статус</h1>
               <p class="value status-value">
-                <span class="circle blue-background"></span><span>В процессе</span>
+                <span class="circle"></span><span>${el.status}</span>
               </p>
             </div>
             <div class="control-buttons-container">
@@ -193,31 +194,31 @@ const pendingStatusButton = document.getElementById("pending-radio");
 const currentStatusButton = document.getElementById("current-radio");
 const nearestStatusButton = document.getElementById("nearest-radio");
 
-let currentStatusName = "<span>Корзина<span>";
+let currentStatusName = "Корзина";
 const statusNameContainer = document.querySelector(".status-name");
-statusNameContainer.innerHTML = currentStatusName;
+statusNameContainer.innerHTML = "<span>" + currentStatusName + "</span>";
 
 basketStatusButton.addEventListener("click", () => {
-    currentStatusName = "<span>Корзина<span>";
-    statusNameContainer.innerHTML = currentStatusName;
+    currentStatusName = "Корзина";
+    statusNameContainer.innerHTML = "<span>" + currentStatusName + "</span>";
     statusDropdown.classList.toggle("hide");
 });
 
 pendingStatusButton.addEventListener("click", () => {
-    currentStatusName = "<span>Отложенное<span>";
-    statusNameContainer.innerHTML = currentStatusName;
+    currentStatusName = "Отложенное";
+    statusNameContainer.innerHTML = "<span>" + currentStatusName + "</span>";
     statusDropdown.classList.toggle("hide");
 });
 
 currentStatusButton.addEventListener("click", () => {
-    currentStatusName = "<span>Текущее<span>";
-    statusNameContainer.innerHTML = currentStatusName;
+    currentStatusName = "Текущее";
+    statusNameContainer.innerHTML = "<span>" + currentStatusName + "</span>";
     statusDropdown.classList.toggle("hide");
 });
 
 nearestStatusButton.addEventListener("click", () => {
-    currentStatusName = "<span>Ближайшее<span>";
-    statusNameContainer.innerHTML = currentStatusName;
+    currentStatusName = "Ближайшее";
+    statusNameContainer.innerHTML = "<span>" + currentStatusName + "</span>";
     statusDropdown.classList.toggle("hide");
 });
 
@@ -272,67 +273,6 @@ addTaskButton.addEventListener("click", async () => {
 
     if (res.status === 200) {
         alert('The task was successfully created');
-
-        const note = `
-        <li class="task-item">
-            <button class="task-button">
-              <p class="task-name">${res.data.task.name}</p>
-              <p class="task-due-date">${res.data.task.description}</p>
-              <iconify-icon
-                      icon="material-symbols:arrow-back-ios-rounded"
-                      style="color: black"
-                      width="18"
-                      height="18"
-                      class="arrow-icon"
-              ></iconify-icon>
-            </button>
-        </li>`;
-
-        const noteInfo = `
-            <h1 class="header no-margin">Имя</h1>
-            <p class="value">${res.data.task.name}</p>
-            <h1 class="header">Описание</h1>
-            <p class="value">
-              ${res.data.task.description}
-            </p>
-            <div class="flex items-center">
-              <h1 class="header min-width">Дата завершения</h1>
-              <p class="value">Сделать до ${res.data.task.deadlineDay}.${res.data.task.deadlineMonth}.${res.data.task.deadlineYear}</p>
-            </div>
-            <div class="flex items-center">
-              <h1 class="header min-width">Статус</h1>
-              <p class="value status-value">
-                <span class="circle blue-background"></span><span>В процессе</span>
-              </p>
-            </div>
-            <div class="control-buttons-container">
-              <button
-                      class="button circle-button pink-background flex justify-center items-center"
-              >
-                <iconify-icon
-                        icon="material-symbols:edit-rounded"
-                        style="color: black"
-                        width="24"
-                        height="24"
-                ></iconify-icon>
-              </button>
-              <button
-                      id="delete-task-cta"
-                      class="button circle-button pink-background flex justify-center items-center"
-                      onclick="deleteNote(${tasks.length - 1})"
-              >
-                <iconify-icon
-                        icon="ic:round-delete"
-                        style="color: black"
-                        width="24"
-                        height="24"
-                ></iconify-icon>
-              </button>
-            </div>`
-
-        tasksViews.push(note);
-        tasksInfo.push(noteInfo);
-        tasks.push(res.data.task);
     }
 
     document.querySelector('#name').value = '';

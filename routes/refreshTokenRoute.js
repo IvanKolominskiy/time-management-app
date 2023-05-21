@@ -43,7 +43,7 @@ refreshTokenRoute.post('/refreshToken', async (req, res) => {
 
         res.json({
             accessToken: accessToken,
-            refreshToken: refreshToken.refresh,
+            refreshToken: refreshToken,
             expiresIn: expiresIn
         });
     } else {

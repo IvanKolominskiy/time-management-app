@@ -20,13 +20,19 @@ async function sendRegisterRequest() {
     return { status: response.status, data: data };
 }
 
+if (localStorage.getItem("accessToken")) {
+    window.location.replace('/dashboard');
+}
+
 const registerButton = document.getElementById("register");
 registerButton.addEventListener("click", async () => {
     const res = await sendRegisterRequest();
 
     if (res.status === 200) {
-        const token = res.data.token;
-        document.cookie = "token=" + token;
+        localStorage.setItem('accessToken', res.data.accessToken);
+        localStorage.setItem('expiresIn', res.data.expiresIn);
+        localStorage.setItem('refreshToken', res.data.refreshToken);
+
         window.location.replace('/dashboard');
     }
 

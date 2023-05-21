@@ -1,6 +1,7 @@
 async function sendAddTaskRequest() {
-    const results = document.cookie.match(/token=(.+?)(;|$)/);
-    const token = results[1];
+    await checkTokenDate();
+
+    const accessToken = localStorage.getItem("accessToken");
 
     const body = {
         name: document.querySelector('#name').value,
@@ -13,7 +14,7 @@ async function sendAddTaskRequest() {
 
     const headers = {
         'Content-Type': 'application/json',
-        'Authorization': token
+        'Authorization': accessToken
     }
 
     const response = await fetch('/dashboard', {
@@ -28,13 +29,14 @@ async function sendAddTaskRequest() {
 }
 
 async function sendGetTasksRequest() {
-    const results = document.cookie.match(/token=(.+?)(;|$)/);
-    const token = results[1];
+    await checkTokenDate();
+
+    const accessToken = localStorage.getItem("accessToken");
 
     const response = await fetch("/dashboard/getTasks", {
         method: 'GET',
         headers: {
-            'Authorization': token
+            'Authorization': accessToken
         }
     });
 
@@ -42,6 +44,8 @@ async function sendGetTasksRequest() {
 }
 
 async function sendEditRequest(taskId) {
+    await checkTokenDate();
+
     const body = {
         name: document.querySelector('#name').value,
         description: document.querySelector('#description').value,
@@ -67,7 +71,28 @@ async function sendEditRequest(taskId) {
     return { status: response.status, data: data };
 }
 
+async function sendRefreshTokenRequest() {
+    const body = {
+        refreshToken: localStorage.getItem("refreshToken"),
+        accessToken: localStorage.getItem("accessToken"),
+    }
+
+    const response = await fetch('/refreshToken', {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+    const data = await response.json();
+
+    return { status: response.status, data: data };
+}
+
 async function deleteTask(index) {
+    await checkTokenDate();
+
     const tasks = JSON.parse(localStorage.getItem("tasks"));
 
     await fetch('/dashboard/deleteTask', {
@@ -140,23 +165,18 @@ async function editTask(index) {
 }
 
 function exit() {
-    const results = document.cookie.match(/token=(.+?)(;|$)/);
-    if (results) {
-        const token = results[1];
-        document.cookie = "token=" + token + "; max-age=0";
-        localStorage.removeItem("tasks");
-    }
-
+    localStorage.removeItem("accessToken");
     window.location.replace('/');
 }
 
-function checkAuth() {
-    const results = document.cookie.match(/token=(.+?)(;|$)/);
-
-    if (!results) {
+async function checkAuth() {
+    const accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) {
         alert('Войдите или зарегистрируйтесь');
         window.location.replace('/');
     }
+
+    await checkTokenDate();
 }
 
 function makeTaskView(task, index) {
@@ -299,6 +319,26 @@ function checkDate(day, month, year) {
 
 function update() {
     window.location.replace("/dashboard");
+}
+
+async function checkTokenDate() {
+    const currentTime = new Date().toISOString();
+    const accessTokenTime = localStorage.getItem("expiresIn");
+
+    if (Date.parse(currentTime) > Date.parse(accessTokenTime)) {
+        const res = await sendRefreshTokenRequest();
+
+        if (res.status === 200) {
+            localStorage.setItem("accessToken", res.data.accessToken);
+            localStorage.setItem("refreshToken", res.data.refreshToken);
+            localStorage.setItem("expiresIn", res.data.expiresIn);
+        }
+
+        if (res.status === 404) {
+            alert(res.data.message);
+            window.location.replace('/login');
+        }
+    }
 }
 
 checkAuth();

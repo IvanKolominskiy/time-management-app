@@ -5,7 +5,7 @@ import UserModel from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import path from 'path';
-import {PRIVATE_KEY} from "../secrets.js";
+import {PRIVATE_ACCESS_KEY, PRIVATE_REFRESH_KEY} from "../secrets.js";
 
 export const mainRoute = new Router();
 const __dirname = path.resolve();
@@ -36,19 +36,38 @@ mainRoute.post('/', registerValidation, async (req, res) => {
 
         const user = await doc.save();
 
-        const token = jwt.sign({
-            _id: user._id,
-        },
-        PRIVATE_KEY,
-        {
-            expiresIn: '30d'
-        });
+        const accessToken = jwt.sign({
+                _id: user._id,
+            },
+            PRIVATE_ACCESS_KEY,
+            {
+                expiresIn: '15m'
+            });
+
+        const refreshToken = jwt.sign({
+                _id: user._id,
+            },
+            PRIVATE_REFRESH_KEY,
+            {
+                expiresIn: '30d'
+            });
+
+        const refreshTokenEndTime = new Date();
+        refreshTokenEndTime.setHours(refreshTokenEndTime.getHours() + 720);
+
+        res.cookie('refreshToken', refreshToken, {httpOnly: true});
+        res.cookie('refreshTokenEndTime', refreshTokenEndTime, {httpOnly: true});
+
+        const expiresIn = new Date();
+        expiresIn.setMinutes(expiresIn.getMinutes() + 15);
 
         const {passwordHash, ...userData} = user._doc;
 
         res.json({
             ...userData,
-            token
+            accessToken,
+            refreshToken,
+            expiresIn
         });
     } catch (error) {
         console.log(error);

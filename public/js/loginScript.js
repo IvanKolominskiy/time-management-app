@@ -24,8 +24,10 @@ loginButton.addEventListener("click", async () => {
     const res = await sendLoginRequest();
 
     if (res.status === 200) {
-        const token = res.data.token;
-        document.cookie = "token=" + token;
+        localStorage.setItem('accessToken', res.data.accessToken);
+        localStorage.setItem('expiresIn', res.data.expiresIn);
+        localStorage.setItem('refreshToken', res.data.refreshToken);
+
         window.location.replace('/dashboard');
     } else {
         alert(res.data.message);

@@ -4,7 +4,7 @@ import {taskValidation} from "../validations/taskValidation.js";
 import TaskModel from "../models/Task.js";
 import path from 'path';
 import jwt from "jsonwebtoken";
-import {PRIVATE_KEY} from "../secrets.js";
+import {PRIVATE_ACCESS_KEY} from "../secrets.js";
 
 export const dashboardRoute = new Router();
 const __dirname = path.resolve();
@@ -17,7 +17,7 @@ dashboardRoute.post('/dashboard', taskValidation, async (req, res) => {
     console.log(req.body);
 
     const token = (req.headers.authorization || '').replace(/Bearer\s?/, '');
-    const decoded = jwt.verify(token, PRIVATE_KEY);
+    const decoded = jwt.verify(token, PRIVATE_ACCESS_KEY);
 
     try {
         const errors = validationResult(req);
@@ -47,7 +47,7 @@ dashboardRoute.post('/dashboard', taskValidation, async (req, res) => {
 
 dashboardRoute.get('/dashboard/getTasks', async (req, res) => {
     const token = (req.headers.authorization || '').replace(/Bearer\s?/, '');
-    const decoded = jwt.verify(token, PRIVATE_KEY);
+    const decoded = jwt.verify(token, PRIVATE_ACCESS_KEY);
 
     try {
         const tasks = await TaskModel.find( {user: decoded._id} );

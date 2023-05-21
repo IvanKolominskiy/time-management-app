@@ -3,16 +3,20 @@ import mongoose from 'mongoose';
 import {mainRoute} from "./routes/mainRoute.js";
 import {loginRoute} from "./routes/loginRoute.js";
 import {dashboardRoute} from "./routes/dashboardRoute.js";
+import {refreshTokenRoute} from "./routes/refreshTokenRoute.js";
 import {DB_LOGIN, DB_PASSWORD} from "./secrets.js";
 import path from 'path';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.use(mainRoute);
 app.use(loginRoute);
 app.use(dashboardRoute);
+app.use(refreshTokenRoute);
 
 const __dirname = path.resolve();
 app.use(express.static(path.join(__dirname,'public')));
